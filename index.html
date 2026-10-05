@@ -1059,7 +1059,7 @@ function photoHTML(id,ic,tint){
    "radial-gradient(75% 40% at "+x2.toFixed(0)+"% "+y2.toFixed(0)+"%, rgba(200,212,218,.13), transparent 72%),"+
    (lk?"linear-gradient("+(r()*360).toFixed(0)+"deg, rgba(255,170,90,.12), transparent 40%),":"")+
    "radial-gradient(130% 100% at 50% 42%, #1b2528 0%, #080a0b 78%)";
-  return '<span class="ph" style="background:'+bg+';--glow:rgba('+tint+',.95)">'+icon(ic)+(CAN_PHOTOS?'<img src="img/'+id+'.'+EXTS[0]+'" data-base="img/'+id+'" data-k="0" alt="" loading="lazy">':'')+'<span class="gr"></span></span>';
+  return '<span class="ph" style="background:'+bg+';--glow:rgba('+tint+',.95)">'+icon(ic)+(CAN_PHOTOS&&!MISSING[id]?'<img src="img/'+id+'.'+(FOUND[id]||EXTS[0])+'" data-id="'+id+'" data-ext="'+(FOUND[id]||EXTS[0])+'" alt="" loading="lazy">':'')+'<span class="gr"></span></span>';
 }
 function polHTML(kind,id,ic,tint,cap,tag,lvl,i){
   var r=rng(hash(id+"r"));var rot=(r()*5-2.5).toFixed(2),tr=(r()*8-4).toFixed(1);
@@ -1067,18 +1067,19 @@ function polHTML(kind,id,ic,tint,cap,tag,lvl,i){
     '<span class="cap">'+esc(cap)+'</span><span class="tagl'+(lvl?' lvl'+lvl:'')+'">'+esc(tag)+'</span></button></li>';
 }
 /* фото: пробуем все популярные форматы по очереди, удачный формат запоминаем */
-var EXTS=["jpg","jpeg","png","webp","heic","avif","JPG","JPEG","PNG","WEBP","HEIC"];
+var EXTS=["jpg","jpeg","png","webp","heic","avif","JPG","JPEG","PNG","WEBP","HEIC"],FOUND={},MISSING={};
 function wireImgs(root){
   root.querySelectorAll(".ph img").forEach(function(img){
+    var id=img.dataset.id,first=img.dataset.ext,order=[first].concat(EXTS.filter(function(e){return e!==first;})),k=0;
     function next(){
-      var k=+img.dataset.k+1;
-      if(k>=EXTS.length){img.remove();return;}
-      img.dataset.k=k;img.src=img.dataset.base+"."+EXTS[k];
+      k++;
+      if(k>=order.length){MISSING[id]=true;img.remove();return;}
+      img.src="img/"+id+"."+order[k];
     }
     img.addEventListener("error",next);
     img.addEventListener("load",function(){
-      var e=EXTS[+img.dataset.k];
-      if(e!==EXTS[0]){EXTS.splice(EXTS.indexOf(e),1);EXTS.unshift(e);}
+      var e=order[k];FOUND[id]=e;
+      var i=EXTS.indexOf(e);if(i>0){EXTS.splice(i,1);EXTS.unshift(e);}
     },{once:true});
     if(img.complete&&img.naturalWidth===0&&img.getAttribute("src"))next();
   });
