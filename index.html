@@ -123,7 +123,7 @@ button{font:inherit;color:inherit}
 @media (min-width:920px){.pgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .pol{all:unset;box-sizing:border-box;display:block;width:100%;cursor:pointer;position:relative;background:var(--polar);padding:8px 8px 0;border-radius:2px;
   box-shadow:0 12px 22px -12px rgba(0,0,0,.7);transform:rotate(var(--r)) translateY(22px);opacity:0;
-  transition:transform .7s var(--ease),opacity .5s ease;transition-delay:calc(var(--i,0)*45ms)}
+  transition:transform .45s var(--ease),opacity .35s ease;transition-delay:calc(var(--i,0)*25ms)}
 .pol.in{opacity:1;transform:rotate(var(--r))}
 @media (hover:hover){.pol.in:hover{transform:rotate(0) translateY(-4px);transition-delay:0s}}
 .pol:focus-visible{outline:2px solid var(--amber);outline-offset:4px}
@@ -131,10 +131,11 @@ button{font:inherit;color:inherit}
 .ph{position:relative;aspect-ratio:1/1;overflow:hidden;display:grid;place-items:center;color:#EFE4C8}
 .ph svg{width:52%;height:52%;position:relative;z-index:1}
 .sheet .ph svg{filter:drop-shadow(0 0 6px var(--glow))}
-.ph::after{content:"";position:absolute;inset:0;z-index:3;background:#E9E2D2;opacity:1;transition:opacity 1.6s ease .3s;pointer-events:none}
+.ph::after{content:"";position:absolute;inset:0;z-index:3;background:#E9E2D2;opacity:1;transition:opacity .55s ease;pointer-events:none}
 .pol.in .ph::after,.sheet .ph::after{opacity:0}
 .ph .gr{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.14;background-image:var(--noise,none);background-size:96px 96px}
-.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;filter:sepia(.25) saturate(.75) contrast(1.08) brightness(.92)}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;filter:sepia(.25) saturate(.75) contrast(1.08) brightness(.92);opacity:0;transition:opacity .25s ease}
+.ph img.ld{opacity:1}
 .cap{display:block;font-family:var(--hand);font-weight:700;font-size:21px;line-height:1.05;color:#2A2117;text-align:center;padding:9px 2px 4px;overflow-wrap:anywhere}
 .tagl{display:block;text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:0 2px 10px;color:var(--c,#6B5B44)}
 @media (min-width:640px){.cap{font-size:23px}}
@@ -177,6 +178,7 @@ footer code{font-family:var(--mono);font-size:13px;background:var(--line);paddin
 /* spoiler toggle + gate */
 .sptog{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:transparent;border-radius:6px;padding:8px 10px;cursor:pointer;font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .sptog svg{width:18px;height:18px}
+.langtog{font-weight:700;color:var(--text);min-width:44px;justify-content:center}
 .sptog[aria-pressed="true"]{color:var(--red);border-color:rgba(192,40,30,.5)}
 @media (max-width:560px){.sptog .lbl{display:none}}
 .gate{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 40%,rgba(30,8,6,.92),rgba(2,2,2,.98) 70%);opacity:0;transition:opacity .5s ease}
@@ -194,9 +196,35 @@ footer code{font-family:var(--mono);font-size:13px;background:var(--line);paddin
 .gbtn:hover{border-color:#C0281E}
 .sec.spoil{position:relative}
 .reveal{display:none}
+.spoil>*:not(h4):not(.reveal){transition:filter .8s ease,opacity .8s ease}
 .veiled>*:not(h4):not(.reveal){filter:blur(7px);opacity:.55;user-select:none;pointer-events:none}
-.veiled .reveal{display:inline-block;position:absolute;left:50%;top:44px;transform:translateX(-50%);font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:9px 14px;border-radius:3px;border:1.5px solid var(--pred);background:rgba(220,205,170,.85);color:var(--pred);cursor:pointer;white-space:nowrap;z-index:2}
+.veiled .reveal{display:inline-flex;align-items:center;gap:8px;position:absolute;left:50%;top:44px;transform:translateX(-50%) rotate(-1.5deg);font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:9px 14px;border-radius:3px;border:1.5px solid var(--pred);background:rgba(220,205,170,.9);color:var(--pred);cursor:pointer;white-space:nowrap;z-index:2;
+  box-shadow:0 0 0 0 rgba(142,21,14,.35),0 6px 14px -8px rgba(0,0,0,.6);animation:beckon 2.6s ease-in-out infinite;transition:background .2s,color .2s,transform .2s var(--ease)}
+.reveal svg{width:16px;height:16px;flex:0 0 auto}
+@keyframes beckon{0%,100%{box-shadow:0 0 0 0 rgba(142,21,14,.35),0 6px 14px -8px rgba(0,0,0,.6)}50%{box-shadow:0 0 0 7px rgba(142,21,14,0),0 6px 14px -8px rgba(0,0,0,.6)}}
+@media (hover:hover){.veiled .reveal:hover{background:var(--pred);color:#F0E6D2;transform:translateX(-50%) rotate(0) scale(1.05)}}
+.veiled .reveal:active{transform:translateX(-50%) scale(.95)}
+.veiled .reveal.pop{animation:pop .32s cubic-bezier(.3,1.4,.5,1) forwards;pointer-events:none}
+@keyframes pop{0%{transform:translateX(-50%) rotate(-1.5deg) scale(1)}45%{transform:translateX(-50%) rotate(3deg) scale(1.15);opacity:1}100%{transform:translateX(-50%) rotate(8deg) scale(.4);opacity:0}}
+.spoil.unveil::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(100deg,transparent 30%,rgba(255,236,190,.5) 50%,transparent 70%);background-size:260% 100%;animation:sweep .9s ease forwards}
+@keyframes sweep{from{background-position:130% 0}to{background-position:-30% 0}}
 .veiled.kill{min-height:110px}
+/* scrollbars in the site's style */
+html{scrollbar-width:thin;scrollbar-color:#5c1812 #070909}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#070909}
+::-webkit-scrollbar-thumb{background:linear-gradient(#6e1c14,#3a0e09);border-radius:10px;border:2px solid #070909}
+::-webkit-scrollbar-thumb:hover{background:#8E150E}
+.sheet{scrollbar-width:thin;scrollbar-color:#5b4329 rgba(60,40,20,.14)}
+.sheet::-webkit-scrollbar{width:9px}
+.sheet::-webkit-scrollbar-track{background:rgba(60,40,20,.12);border-radius:0 6px 6px 0}
+.sheet::-webkit-scrollbar-thumb{background:linear-gradient(#6b4f30,#4a3420);border-radius:9px;border:2px solid #b7a47e}
+.sheet::-webkit-scrollbar-thumb:hover{background:#8E150E}
+/* arriving at a section */
+h2.arrive{position:relative;animation:flick .9s steps(1,end)}
+h2.arrive::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:3px;border-radius:2px;background:var(--red);transform-origin:left;transform:scaleX(0);animation:ink .7s var(--ease) .1s forwards,inkout .6s ease 1.4s forwards}
+@keyframes ink{to{transform:scaleX(1)}}
+@keyframes inkout{to{opacity:0}}
 /* sheet: journal page */
 .sheet-wrap{position:fixed;inset:0;z-index:100}
 .sheet-wrap[hidden]{display:none}
@@ -265,14 +293,15 @@ footer code{font-family:var(--mono);font-size:13px;background:var(--line);paddin
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Наверх">
       <svg viewBox="0 0 48 48" class="ic" aria-hidden="true"><circle cx="24" cy="24" r="21"/><circle cx="24" cy="24" r="17"/><path d="M24 7.5L33.7 37.4 8.3 18.9H39.7L14.3 37.4z"/></svg>
-      <span>Дневник охотника</span>
+      <span data-i18n="brand">Дневник охотника</span>
     </a>
     <div class="sbox">
       <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-      <label class="sr" for="q">Поиск по дневнику</label>
-      <input class="search" id="q" type="search" placeholder="Вампир, Кас, серебро…" autocomplete="off" enterkeyhint="search">
+      <label class="sr" for="q" data-i18n="searchLbl">Поиск по дневнику</label>
+      <input class="search" id="q" type="search" placeholder="Вампир, Кас, серебро…" data-i18n-ph="search" autocomplete="off" enterkeyhint="search">
     </div>
     <button type="button" class="sptog" id="sptog" aria-pressed="false"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path class="slash" d="M4 4l16 16"/></svg><span class="lbl">Спойлеры</span><span class="sr" id="spState">показаны</span></button>
+    <button type="button" class="sptog langtog" id="langtog">EN</button>
   </div>
 </div>
 
@@ -347,21 +376,21 @@ footer code{font-family:var(--mono);font-size:13px;background:var(--line);paddin
   <canvas id="rain" aria-hidden="true"></canvas>
   <div class="flash" id="flash" aria-hidden="true"></div>
   <div class="hero-in">
-    <h1 class="logo" id="logo">Сверхъестественное</h1>
-    <p class="sub">Дневник охотника</p>
-    <p class="lead">Все, на кого охотились Сэм и Дин, и все, кто охотился рядом с ними. Откуда легенда, что было в сериале и чем их убить.</p>
+    <h1 class="logo" id="logo" data-i18n="logo">Сверхъестественное</h1>
+    <p class="sub" data-i18n="sub">Дневник охотника</p>
+    <p class="lead" data-i18n="lead">Все, на кого охотились Сэм и Дин, и все, кто охотился рядом с ними. Откуда легенда, что было в сериале и чем их убить.</p>
     <nav class="tabs" aria-label="Разделы">
-      <a href="#bestiary" style="--r:-2deg">Монстры</a>
-      <a href="#heroes" style="--r:1.5deg">Герои</a>
-      <a href="#arsenal" style="--r:-1deg">Оружие</a>
+      <a href="#bestiary" style="--r:-2deg" data-i18n="tab1">Монстры</a>
+      <a href="#heroes" style="--r:1.5deg" data-i18n="tab2">Герои</a>
+      <a href="#arsenal" style="--r:-1deg" data-i18n="tab3">Оружие</a>
     </nav>
   </div>
 </header>
 
 <main class="wrap">
   <section class="sect" id="bestiary" aria-labelledby="bH">
-    <div class="shead"><h2 id="bH">Монстры</h2><span class="note">из дневника охотника</span></div>
-    <p class="sdesc">Нажмите на снимок, чтобы открыть страницу дневника: откуда легенда, какой монстр в сериале и как его убить.</p>
+    <div class="shead"><h2 id="bH" data-i18n="bH">Монстры</h2><span class="note" data-i18n="bNote">из дневника охотника</span></div>
+    <p class="sdesc" data-i18n="bDesc">Нажмите на снимок, чтобы открыть страницу дневника: откуда легенда, какой монстр в сериале и как его убить.</p>
     <div class="chips" id="chipsD" role="group" aria-label="Уровень опасности"></div>
     <div class="chips" id="chipsC" role="group" aria-label="Тип существа"></div>
     <p class="count" id="count" aria-live="polite"></p>
@@ -369,8 +398,8 @@ footer code{font-family:var(--mono);font-size:13px;background:var(--line);paddin
   </section>
 
   <section class="sect" id="heroes" aria-labelledby="hH">
-    <div class="shead"><h2 id="hH">Герои</h2><span class="note">семья не заканчивается кровью</span></div>
-    <p class="sdesc">Винчестеры, охотники, ангелы и демоны, без которых не было бы этой истории. У Дина, Сэма и Каса расписан каждый сезон.</p>
+    <div class="shead"><h2 id="hH" data-i18n="hH">Герои</h2><span class="note" data-i18n="hNote">семья не заканчивается кровью</span></div>
+    <p class="sdesc" data-i18n="hDesc">Винчестеры, охотники, ангелы и демоны, без которых не было бы этой истории. У Дина, Сэма и Каса расписан каждый сезон.</p>
     <div class="chips" id="chipsH" role="group" aria-label="Группа героев"></div>
     <p class="count" id="hcount" aria-live="polite"></p>
     <ul class="pgrid" id="hlist"></ul>
@@ -378,26 +407,26 @@ footer code{font-family:var(--mono);font-size:13px;background:var(--line);paddin
   </section>
 
   <section class="trunk" id="arsenal" aria-labelledby="aH">
-    <h2 id="aH">Оружие и защита</h2>
-    <p>Всё, что лежит в багажнике Импалы: чем отгоняют, ловят и убивают. У большинства средств есть настоящие корни в старых поверьях.</p>
+    <h2 id="aH" data-i18n="aH">Оружие и защита</h2>
+    <p data-i18n="aDesc">Всё, что лежит в багажнике Импалы: чем отгоняют, ловят и убивают. У большинства средств есть настоящие корни в старых поверьях.</p>
     <div class="items" id="items"></div>
   </section>
 
   <footer>
-    <p>Неофициальный фанатский справочник. Внутри спойлеры ко всем 15 сезонам. Снимки в дневнике — эмблемы, нарисованные для сайта.</p>
-    <p>Свои фото можно добавить на собственном хостинге: положите рядом с index.html папку <code>img</code> с файлами вида <code>dean.jpg</code>, <code>vampire.png</code> или <code>castiel.webp</code> — они появятся в снимках автоматически. Подходят jpg, jpeg, png, webp, heic и avif.</p>
+    <p data-i18n="f1">Неофициальный фанатский справочник. Внутри спойлеры ко всем 15 сезонам. Снимки в дневнике — эмблемы, нарисованные для сайта.</p>
+    <p data-i18n-html="f2">Свои фото можно добавить на собственном хостинге: положите рядом с index.html папку <code>img</code> с файлами вида <code>dean.jpg</code>, <code>vampire.png</code> или <code>castiel.webp</code> — они появятся в снимках автоматически. Подходят jpg, jpeg, png, webp, heic и avif.</p>
   </footer>
 </main>
 
 <div class="gate" id="gate" hidden role="dialog" aria-modal="true" aria-labelledby="gateT">
   <div class="gate-in">
     <svg viewBox="0 0 48 48" class="ic" aria-hidden="true"><circle cx="24" cy="24" r="21"/><circle cx="24" cy="24" r="17"/><path d="M24 7.5L33.7 37.4 8.3 18.9H39.7L14.3 37.4z"/></svg>
-    <h2 id="gateT">Осторожно: спойлеры</h2>
-    <p>В дневнике раскрыто, что происходит во всех 15 сезонах: кто погибнет, кто вернётся и чем закончится история.</p>
-    <p class="gnote">Ещё не досмотрели? Скройте спойлеры: опасные места будут закрыты, и вы откроете только то, что захотите.</p>
+    <h2 id="gateT" data-i18n="gT">Осторожно: спойлеры</h2>
+    <p data-i18n="gP">В дневнике раскрыто, что происходит во всех 15 сезонах: кто погибнет, кто вернётся и чем закончится история.</p>
+    <p class="gnote" data-i18n="gN">Ещё не досмотрели? Скройте спойлеры: опасные места будут закрыты, и вы откроете только то, что захотите.</p>
     <div class="gbtns">
-      <button type="button" class="gbtn primary" data-sp="show">Я всё видел, показать</button>
-      <button type="button" class="gbtn" data-sp="hide">Скрыть спойлеры</button>
+      <button type="button" class="gbtn primary" data-sp="show" data-i18n="gShow">Я всё видел, показать</button>
+      <button type="button" class="gbtn" data-sp="hide" data-i18n="gHide">Скрыть спойлеры</button>
     </div>
   </div>
 </div>
@@ -406,11 +435,17 @@ footer code{font-family:var(--mono);font-size:13px;background:var(--line);paddin
   <div class="scrim" data-close></div>
   <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sTitle">
     <div class="grab" id="grab"><i></i></div>
-    <button class="sclose" data-close aria-label="Закрыть"><svg viewBox="0 0 16 16" class="ic" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
+    <button class="sclose" data-close aria-label="Закрыть" data-i18n-aria="close"><svg viewBox="0 0 16 16" class="ic" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
     <div class="sin" id="sheetBody"></div>
   </div>
 </div>
 <script>
+window.LANG=(function(){var p=null,s=null;
+  try{p=new URLSearchParams(location.search).get("lang");}catch(e){}
+  if(p==="en"||p==="ru"){try{localStorage.setItem("spn-lang",p);}catch(e){}return p;}
+  try{s=localStorage.getItem("spn-lang");}catch(e){}
+  if(s==="en"||s==="ru")return s;
+  return /^(ru|uk|be|kk)/i.test(navigator.language||"ru")?"ru":"en";})();
 var ICONS={
 spirit:'<path d="M24 6C17 6 12 11 12 18v18q2 3 4 0t4 0 4 0 4 0 4 0 4 0V18C36 11 31 6 24 6z"/><ellipse cx="20" cy="19" rx="1.8" ry="2.6" fill="currentColor"/><ellipse cx="28" cy="19" rx="1.8" ry="2.6" fill="currentColor"/><ellipse cx="24" cy="27" rx="2" ry="2.8"/><path d="M8 14c-2 3-2 6 0 9M40 14c2 3 2 6 0 9"/>',
 veil:'<path d="M24 5c-6 0-9 5-9 10 0 4 2 7 2 10-3 6-7 10-9 17h32c-2-7-6-11-9-17 0-3 2-6 2-10 0-5-3-10-9-10z"/><ellipse cx="24" cy="17" rx="4.5" ry="6"/><path d="M22 16h.01M26 16h.01M16 42c2-5 5-9 8-11 3 2 6 6 8 11"/>',
@@ -1035,13 +1070,260 @@ dean:[["1","Вместе с Сэмом ищет пропавшего отца, �
 sam:[["1","Уходит из Стэнфорда после гибели Джессики; у него начинаются видения."],["2","Узнаёт о плане Азазеля; погибает в Колд-Оук, Дин его возвращает."],["3","Пытается спасти Дина от сделки и сближается с Руби."],["4","Демоническая кровь и сила. Убивает Лилит и освобождает Люцифера."],["5","Соглашается стать сосудом Люцифера и прыгает в Клетку."],["6","Возвращается без души; Смерть возвращает её со стеной в памяти."],["7","Стена рушится, Сэма мучают галлюцинации Люцифера. Кас забирает его безумие."],["8","Год нормальной жизни с Амелией, затем Испытания для закрытия Ада."],["9","Гадриэль в его теле; разлад с Дином."],["10","Ищет способ снять Метку, находит Книгу Проклятых."],["11","Видения, связанные с Тьмой, и встреча с Богом."],["12","Британские Хранители и охота на Люцифера."],["13","Собирает охотников из альтернативного мира."],["14","Лидер охотников, ищет Дина, захваченного Михаилом."],["15","Война с Чаком. Долгая жизнь после финала."]],
 castiel:[["4","Вытаскивает Дина из Ада и служит Небесам."],["5","Бунтует против ангелов, ищет Бога, теряет силы."],["6","Гражданская война на Небесах; поглощает души Чистилища."],["7","Объявляет себя Богом, выпускает Левиафанов, теряет память, забирает безумие Сэма."],["8","Чистилище, плен у Наоми, обман Метатрона."],["9","Становится человеком, затем живёт на чужой Благодати."],["10","Благодать угасает; он едва выживает после проклятия Ровены."],["11","Позволяет Люциферу вселиться в себя."],["12","Рядом с Келли и будущим Джеком; погибает от руки Люцифера."],["13","Возвращается из Эмпти."],["14","Заключает сделку с Эмпти ради Джека."],["15","Признаётся Дину в любви и уходит в Эмпти."]]
 };
+var EN_UI={
+mythH:"Where the legend comes from",showH:"In the show",loreH:"Its story in the show",killH:"How to kill it",
+storyH:"Story",charH:"Personality",tlH:"Season by season",momH:"Key moments",fateH:"How it ended",
+reveal:"Show spoiler",anyThreat:"Any threat",allTypes:"All types",all:"All",
+monCount:"Monsters in the journal: ",heroCount:"Characters in the journal: ",found:"Found: ",of:" of ",
+emptyMon:"Nothing in the journal matches.",reset:"Clear filters",emptyHero:"No one matches.",
+threat:"Threat: ",prev:"Previous",next:"Next",actor:"Actor: ",seasons:"Seasons ",
+xl:"More of them in the monsters section:",vs:"Works on: ",
+spOn:"No spoilers",spOff:"Spoilers",spShown:"shown",spHidden:"hidden",close:"Close"
+};
+var EN_DNAME={1:"Low",2:"Medium",3:"High",4:"Deadly"};
+var EN_DANGER={
+1:{name:"Low danger",desc:"An experienced hunter can handle these with the basics: salt, iron, silver, fire."},
+2:{name:"Medium danger",desc:"You need to prepare: each one has its own rare weakness."},
+3:{name:"High danger",desc:"You can't win alone. It takes special weapons, allies or a miracle."},
+4:{name:"Deadly danger",desc:"Cosmic-level powers. Ordinary weapons are useless."}
+};
+var EN_CATS={ghost:"Ghosts & the dead",beast:"Monsters",magic:"Witchcraft",hell:"Demons",heaven:"Angels",god:"Gods & higher powers"};
+var EN_HGROUPS={family:"Winchester family",hunters:"Hunters & friends",super:"Angels, demons & others"};
+var EN_STATIC={
+title:"Supernatural · Hunter's Journal",brand:"Hunter's Journal",search:"Vampire, Cas, silver…",searchLbl:"Search the journal",
+logo:"Supernatural",sub:"Hunter's Journal",
+lead:"Everything Sam and Dean hunted, and everyone who hunted beside them. Where each legend comes from, what happened in the show and how to kill it.",
+tab1:"Monsters",tab2:"Characters",tab3:"Weapons",
+bH:"Monsters",bNote:"from a hunter's journal",bDesc:"Tap a photo to open its journal page: where the legend comes from, what it's like in the show and how to kill it.",
+hH:"Characters",hNote:"family doesn't end with blood",hDesc:"The Winchesters, hunters, angels and demons who made this story. Dean, Sam and Cas have every season laid out.",
+aH:"Weapons & protection",aDesc:"Everything in the Impala's trunk: what wards off, traps and kills. Most of it has real roots in old folklore.",
+f1:"An unofficial fan guide. Contains spoilers for all 15 seasons. The photos in the journal are emblems drawn for this site.",
+f2:"You can add your own photos on your own hosting: put an <code>img</code> folder next to index.html with files like <code>dean.jpg</code>, <code>vampire.png</code> or <code>castiel.webp</code> and they'll appear automatically. jpg, jpeg, png, webp, heic and avif all work.",
+gT:"Warning: spoilers",gP:"This journal reveals what happens across all 15 seasons: who dies, who comes back and how the story ends.",
+gN:"Not finished the show yet? Hide spoilers: the risky parts will be covered and you can uncover only what you want.",
+gShow:"I've seen it all, show me",gHide:"Hide spoilers"
+};
+
+/* id: [name, short description, legend, in the show, how to kill, hunter's note] */
+var EN_DATA={
+"spirit":["Vengeful Spirit","the ghost of someone who can't rest","Belief that a soul can linger among the living exists almost everywhere. Pliny the Younger retold the story of a house in Athens where chains rattled at night; in Japan such ghosts are called yūrei. The German word 'poltergeist' means 'noisy ghost'. The shared idea: a violent death or unfinished business keeps the soul on earth.","The Winchesters' most common enemy. A spirit is tied to a place, an object or a person and grows stronger and angrier over time. It can throw things, make lights flicker and, in a rage, kill.","Find the remains, salt them and burn them. If the spirit is tied to an object, destroy the object. Salt and iron only drive it away for a while.","First find out who it was in life. Otherwise you'll burn the wrong skeleton."],
+"woman-in-white":["Woman in White","the ghost of a woman on a night road","White Lady legends are known across Europe and the Americas. In Mexico she is La Llorona, 'the Weeping Woman': a mother who drowned her children and wanders by the water forever looking for them. Meeting her on the road means trouble.","The show's very first case. The ghost of Constance Welch, who killed her own children, stops unfaithful men on the highway and kills them.","Bring the ghost back to the house where her children died: the children take their mother with them.","Don't pick up women in white on an empty highway. Seriously."],
+"bloody-mary":["Bloody Mary","a ghost in the mirror","The mirror ritual dates back to the 19th century, when girls used candlelit mirrors to glimpse their future husband. It later turned into a children's scary game about summoning a ghost by saying her name three times. The name is often linked to Queen Mary I of England.","The spirit lives in mirrors and comes for people who hide a secret about someone's death. Victims die bleeding from the eyes.","Make the spirit see its own reflection and break the mirror it's trapped in.","Don't say her name in front of a mirror. Not even as a joke."],
+"hookman":["Hook Man","the ghost of a killer with a hook","A 1950s American urban legend: an escaped maniac with a hook for a hand attacks a couple in a parked car, and in the morning the hook is found hanging on the door handle. A classic cautionary tale.","The ghost of a 19th-century preacher executed for murder. His silver hook was melted down into other objects, and through them he keeps killing.","Find and destroy everything made from the melted hook, and burn the remains.","A ghost can even hide in church silver. Check all of it."],
+"tulpa":["Tulpa","a ghost created by people's belief","A concept from Tibetan Buddhism: a 'thought-form' created by focused concentration. It became known in the West through the traveller Alexandra David-Néel in the 1920s.","A ghost born from the belief of thousands of people who read a made-up legend online. It becomes exactly what they imagine.","Change the legend people believe in, or destroy the place the tulpa is tied to. In the show, fire did it.","Don't post scary stories online. Someone will believe them."],
+"zombie":["Zombie","a walking corpse","The word comes from Haitian Vodou: a sorcerer, a bokor, supposedly enslaves a person and then 'raises' them. Researchers have linked the legend to a poison that causes a death-like state. European folklore has similar revenants.","The dead come back through necromancy or a curse. At first they seem almost alive, but they quickly turn feral and start killing. Once, almost an entire town rose.","A shot to the head or decapitation. Fire destroys the body for good.","If a dead relative comes home for dinner, don't celebrate. Load up."],
+"ghoul":["Ghoul","an eater of the dead","The Arabic ghūl, 'the seizer', is a desert demon from pre-Islamic belief. It lures travellers, eats corpses and changes shape. Through the Thousand and One Nights it reached European literature.","Corpse-eaters who live near morgues and cemeteries. After eating a person, a ghoul can take on their appearance and memories.","Decapitation or destroying the brain.","If bodies go missing from the morgue, it isn't always med students."],
+"banshee":["Banshee","a spirit whose scream calls you to death","The Irish bean sídhe, 'woman of the fairy mound': a spirit whose piercing wail foretells a death in old families. She doesn't kill, she only announces.","The show turned the banshee into a predator: she calls her victim in the voice of a loved one, drives them mad and kills them.","A golden dagger.","If you hear your mom's voice where she can't be, cover your ears."],
+"vampire":["Vampire","a bloodsucker","The image grew from Slavic upyr and Romanian strigoi. In the 1720s–1730s Serbia had a 'vampire panic' after the case of Arnold Paole, and the literary vampire was created by Polidori (1819) and Stoker (1897).","Here vampirism is an infection passed through blood. Vampires live in nests, are strong and fast, and have a second row of teeth that slides out. Sunlight bothers them but doesn't kill; garlic and crosses do nothing.","Cut off the head. Dead man's blood weakens and paralyses them but doesn't kill.","Leave the silver and garlic at home. Bring a machete."],
+"werewolf":["Werewolf","a wolf-man","In Ovid, King Lycaon is turned into a wolf by Zeus for cannibalism. In 16th-century Europe 'werewolves' stood trial (Peter Stumpp, 1589). Silver against them became famous through the legend of the Beast of Gévaudan.","The curse spreads by bite. The change comes with the full moon, and the person may not remember the night. They tear out and eat their victims' hearts.","Silver to the heart: a bullet or a blade.","There's never 'enough' silver. Bring extra."],
+"wendigo":["Wendigo","a man-eater from the woods","The wiindigoo of Algonquian lore (Ojibwe, Cree) is a spirit of winter hunger and cannibalism, a warning of what extreme hunger does to a person.","A person who eats human flesh slowly becomes a wendigo: fast, strong and able to mimic voices. It keeps its victims alive in its lair.","Fire. On the first case a flare gun did the job.","If someone calls for help in the woods, think about who's calling."],
+"rugaru":["Rugaru","a person who becomes a man-eater","The Louisiana version of the French loup-garou. According to Cajun Catholic belief, anyone who breaks Lent seven years in a row becomes a rugaru.","A person is born with this nature and lives a normal life until the hunger wakes. Once they taste human flesh, the change is complete.","Fire.","Hunger can be held back. But for how long?"],
+"shapeshifter":["Shapeshifter","a monster that takes someone else's face","Shapeshifting is one of the oldest myth motifs: Proteus in the Odyssey, Japanese kitsune, Scottish selkies. Behind it is the fear that someone you know is really a stranger.","A shapeshifter copies a victim's looks and memories and sheds its old skin. On camera its eyes flash.","Silver to the heart.","Check the eyes on camera footage. They give a shifter away."],
+"skinwalker":["Skinwalker","a sorcerer living as a dog","Among the Navajo, the yee naaldlooshii is an evil witch who can turn into an animal. People avoid speaking of them aloud.","Skinwalkers hide inside families as pet dogs while the pack prepares an attack.","Silver.","If the dog looks at you a little too humanly, stay alert."],
+"kitsune":["Kitsune","a Japanese fox shapeshifter","The Japanese fox spirit. With age and power it gains more tails, up to nine. It can be cunning or grateful and loyal.","They look human but feed on their victims' pituitary glands, piercing the skull with their claws. The best known is Amy Pond, Sam's childhood friend.","A blade to the heart.","Not every kitsune is a killer. But mercy has a price."],
+"siren":["Siren","a seducer who drives men mad","In the Odyssey, sirens lure sailors to their deaths with song, and Odysseus has himself tied to the mast. Later they were drawn as half-woman, half-fish.","A siren takes the form of whoever the victim needs most, and its saliva makes people obsessively devoted. In the end it turned Sam and Dean against each other.","A bronze dagger dipped in the blood of someone under its spell.","If your new friend is too perfect, that's suspicious."],
+"wraith":["Wraith","a monster that feeds on brains","The Scottish 'wraith' was a ghostly double that appears before a person's death.","Wraiths live among people, for example in psychiatric hospitals, and feed on brain fluid through a spike in their wrist. Mirrors show their true face.","Silver.","Watch reflections. A wraith can't fake it in a mirror."],
+"rakshasa":["Rakshasa","a man-eating demon dressed as a clown","In Hinduism, rakshasas are shape-shifting man-eating demons. Their king Ravana is the great villain of the Ramayana.","A rakshasa hid in a travelling circus as a clown and killed children's parents. It can only enter a house if invited.","A dagger of pure brass.","Never invite a clown into your house."],
+"shtriga":["Shtriga","a witch who drinks children's life","Albanian folklore: a witch who drains the life out of children at night.","It feeds on children's life force. As a boy Dean let it get away and nearly lost Sam; years later the brothers finished the hunt.","Consecrated iron rounds, fired while it feeds.","It's invulnerable when it isn't eating. Wait for the moment."],
+"changeling":["Changeling","a monster that replaces children","European belief: fairies steal a baby and leave one of their own in the cradle. Because of it, sick children were subjected to cruel 'tests' for centuries.","Changelings take children's places and secretly feed on the mother, while the real children are hidden alive.","Find and burn the changeling mother: the young die with her.","If a child suddenly isn't themselves, listen to the mother."],
+"khan-worm":["Khan Worm","a worm that takes over people","No direct folklore source: it echoes science fiction about mind-controlling parasites.","The worm enters through the ear and controls its host, jumping from body to body. It caused a bloodbath among hunters.","A strong electric shock.","If your partner acts strange, check their ears."],
+"dragon":["Dragon","a dragon in human form","European dragons guard treasure and carry off maidens. They were slain by Saint George, Beowulf and Sigurd, who killed Fafnir.","Dragons in human form abducted young women to bring the Mother of All back into the world.","A sword forged with dragon's blood.","Don't bring an ordinary blade into a cave full of captives."],
+"phoenix":["Phoenix","an immortal firebird","A bird that burns and is reborn from its ashes. The Greeks took the idea from the Egyptian Bennu bird. A symbol of eternal renewal.","A phoenix in human form lived in the Old West. The brothers travelled to 1861 for its ashes, the only weapon against Eve.","A bullet from the Colt. Its ash is what kills Eve.","Phoenix ash is worth more than gold."],
+"eve":["Eve","the mother of all monsters","In Genesis, Eve is the first woman. The show gave her name to an ancient creature.","The mother of nearly all monsters, escaped from Purgatory. She creates new creatures and infects people.","Phoenix ash: Dean swallowed it, and Eve died after biting him.","Mother of all monsters. And she had something to protect."],
+"alphas":["Alphas","the first vampires, werewolves and others","There's no direct myth, but the idea of 'the first of its kind' appears in many legends about the ancestors of monsters.","The first of each species, created by Eve: the Alpha Vampire, Alpha Werewolf, Alpha Shapeshifter and more. Older and stronger than ordinary ones; all their 'children' feel their call.","Each has its own method; standard ones often fail.","Don't shoot an alpha casually. The offspring will come."],
+"witch":["Witch","a person who uses dark magic","Witch hunts peaked in the 15th–17th centuries after the Malleus Maleficarum (1486). In Salem in 1692, 20 people were executed.","Witches cast spells using hex bags, rituals and blood. Many draw power from demons, and Rowena is one of the strongest witches in history.","Ordinary weapons, if there's no protective spell. Destroy the hex bag and the spell falls apart.","Found a bag of bones and herbs? Look for its owner."],
+"fairy":["Fairies & Leprechauns","the little folk who steal people","British and Irish fairies are the capricious 'little people' of the hills. Iron protects against them, and leprechauns are known as cobblers and keepers of gold.","Fairies abducted people into their world. They're held back by a compulsion to count spilled things, like sugar or salt.","Iron. Spill salt or sugar and a fairy has to count it.","Spill the salt. Let them count."],
+"jinn":["Djinn","a wish-granter who drinks blood","According to the Quran (55:15), jinn are made from smokeless fire. They became famous as wish-granters in the Thousand and One Nights.","A djinn traps its victim in a world where wishes come true and slowly drinks their blood. Dean went through this in season 2.","A silver knife dipped in lamb's blood.","If everything is too good, it's a dream. Wake up."],
+"golem":["Golem","a clay giant protector","A man of clay brought to life by a word. The best-known legend is about Rabbi Loew of Prague (16th century). To stop a golem, you erased the first letter of 'emet' (truth), leaving 'met' (death).","The golem serves the guardian of a Jewish order and protects him. It obeys whoever knows its scroll.","Stop it with the guardian's command or the ancient rite.","The golem isn't the enemy. The person controlling it might be."],
+"vanir":["Vanir","an ancient harvest god who demands sacrifices","In Norse mythology the Vanir are gods of fertility and harvest (Njord, Freyr, Freyja), rivals of the Aesir.","A god in the form of a scarecrow demands a sacrifice once a year, a couple of travellers, and in return the town prospers.","Burn the sacred tree it's bound to.","Don't stop in towns where everyone is too kind to strangers."],
+"trickster":["Trickster","a prankster god","The trickster archetype: Loki for the Norse, Anansi for the Ashanti, Coyote in Native American lore, Hermes for the Greeks.","Plays cruel pranks. The main trickster turned out to be the archangel Gabriel, hiding as Loki.","A stake to the heart works on ordinary tricksters; Gabriel needs an angel blade.","If death looks like a joke, look for a trickster."],
+"demon":["Demon","an evil spirit from Hell","The Greek daimōn simply meant 'spirit'. Christian demonology built hierarchies: the Ars Goetia lists 72 demons, Johann Weyer (1577) dozens of names.","Twisted souls forged by torture in Hell. They possess people, their eyes turn black, and when exorcised they leave as black smoke.","Ruby's knife, the Colt, the First Blade. An exorcism drives a demon out but doesn't kill it.","Salt, holy water, devil's trap. Remember all three."],
+"crossroads":["Crossroads Demon","buys souls in exchange for wishes","The legend of bluesman Robert Johnson, who sold his soul at the crossroads. The roots go deeper: Faust in Marlowe and Goethe, Saint Theophilus (6th century).","They grant any wish in exchange for your soul, usually with ten years left; the deal is sealed with a kiss. Dean made one to bring Sam back.","Ruby's knife or the First Blade. Can be caught in a devil's trap.","Don't bargain. They always win."],
+"hellhound":["Hellhound","an invisible dog from Hell","Cerberus for the Greeks, Garmr for the Norse, Black Shuck in East Anglia: black dogs foretell death.","They come for sold souls when the deal is due. Invisible except to the doomed.","A special weapon like the Colt. A line of goofer dust stops them.","If you hear barking but see no dog, run."],
+"croatoan":["Croatoan Virus","demonic rabies","In 1590 the abandoned Roanoke colony was found with the word CROATOAN carved into a post. What happened to the colonists is still unknown.","A demonic virus that turns people into rabid killers. Tied to the demons' plans for the end of the world.","There's no cure. The infected have to be killed.","Isolate every bite. Don't trust the 'healthy' ones."],
+"azazel":["Azazel","the yellow-eyed demon","In the Book of Enoch, Azazel leads the fallen Watchers and teaches people to forge weapons. In Leviticus 16 the scapegoat is sent 'to Azazel'.","The yellow-eyed demon who killed Mary Winchester and fed infants his blood to raise an army.","The Colt — Dean killed him in the season 2 finale.","It all started with him. Remember the yellow eyes."],
+"lilith":["Lilith","the first demon","The Sumerian lilitu demons and the Alphabet of Ben Sira (8th–10th centuries), where Lilith is Adam's first wife. She is linked to owls and the night.","The first demon Lucifer created and the last seal on his cage. She holds Dean's contract.","Killed by Sam in the season 4 finale, but her death set Lucifer free.","Some victories are worse than defeats."],
+"alastair":["Alastair","Hell's chief torturer","The Greek Alastor is a spirit of vengeance who haunts a family for its ancestors' crimes.","Hell's chief torturer, who tortured Dean for years and taught him to torture.","Sam destroyed him with the power of his gift.","Hell's torturer knows how to wait. Don't give him time."],
+"princes":["Princes of Hell","the oldest yellow-eyed demons","Ramiel is one of the Watchers in the Book of Enoch, Dagon a god of the Philistines, Asmodeus a demon from the Book of Tobit.","Yellow-eyed demons created by Lucifer: Azazel, Ramiel, Dagon and Asmodeus. Older and stronger than ordinary demons.","The Colt, the Lance of Michael, an archangel blade.","Yellow eyes mean Lucifer's family."],
+"crowley":["Crowley","the King of Hell","The name nods to occultist Aleister Crowley (1875–1947), and the title King of Hell to Beelzebub and the other lords of the underworld.","The Scotsman Fergus MacLeod became a crossroads demon and then King of Hell. An ally by necessity, a cynic and a man of style. Son of the witch Rowena.","An angel blade. He sacrificed himself to lock Lucifer away.","You can't trust him. But sometimes there's no one else."],
+"knights":["Knights of Hell","the first demon warriors","There's no direct myth. Abaddon is named in Revelation (9:11) as the angel of the abyss.","Hell's elite, the oldest demon warriors. Abaddon is the last of them, and she wanted to seize Hell.","Only the First Blade.","Don't go in without the Blade. Better to run."],
+"lucifer":["Lucifer","the fallen angel, the Devil","The Latin lucifer, 'light-bringer', translates a word from Isaiah (14:12) about a Babylonian king who fell from the sky. Later tradition linked it to the Devil; Milton gave us the classic image.","The fallen archangel who created demons. Freed in the season 4 finale, his rising starts the Apocalypse. His vessel is Sam.","An archangel blade; he can be locked back in the Cage.","He doesn't lie. He tells you the truth you need to hear."],
+"angel":["Angel","a warrior of Heaven","The Greek angelos means 'messenger'. In the 5th–6th centuries Pseudo-Dionysius described nine choirs: seraphim, cherubim, thrones and more.","Heavenly soldiers who possess human vessels and wield Grace. The best known is Castiel, who pulled Dean out of Hell.","An angel blade. A ring of holy fire traps an angel.","Angels aren't kind. They're obedient. Cas is the exception."],
+"cupid":["Cupid","the angel of love","The Roman god of love, son of Venus; Eros for the Greeks.","Cupids are the lowest order of angels. Invisible, they hug people warmly and bind couples according to Heaven's plan.","An angel blade.","If a stranger hugs you, don't panic. Usually."],
+"reaper":["Reaper","a guide for the dead","Guides of souls: Charon, Anubis, the Valkyries. The skeleton with a scythe became a symbol in Europe after the Black Death.","Reapers are angels who collect souls. Only the dying and ghosts can see them. Tessa came for Dean at the start of season 2.","An angel blade.","If you see a reaper, it's too late to argue."],
+"metatron":["Metatron","God's scribe","In Jewish mysticism (3 Enoch), the righteous Enoch is transformed into Metatron, the heavenly scribe and 'lesser YHWH'.","God's scribe, who cast the angels out of Heaven and tried to become the new God.","An angel blade.","Whoever writes the story can rewrite you too."],
+"nephilim":["Nephilim","the child of an angel and a human","Genesis (6:4) mentions giants born to the 'sons of God' and human women; in the Book of Enoch they are the offspring of the fallen Watchers.","The child of an angel and a human. Jack, Lucifer's son, grows up in months, has enormous power and becomes part of the Winchester family.","Unpredictable power; ordinary weapons are almost useless.","He isn't evil. But kindness without experience is dangerous."],
+"archangels":["Archangels","the oldest angels","Michael, Gabriel, Raphael and Uriel are named in the Book of Enoch; in Revelation, Michael leads Heaven's army.","God's oldest sons: Michael, Lucifer, Raphael and Gabriel. Their battle was meant to be the Apocalypse, with Dean and Sam as their vessels.","An archangel blade.","An archangel isn't an enemy for a hunter. It's a natural disaster."],
+"pagan":["Pagan Gods","gods of many peoples","Gods of many cultures feed on worship and sacrifice; in many myths they weaken when they're forgotten.","In 'Hammer of the Gods', Odin, Kali and other gods gathered to decide how to face the Apocalypse. Kali is one of the most fearsome.","Each has its own weakness: special blades, rituals, a strike at the source of their power.","Read their myth before the fight. The weakness is often there."],
+"leviathans":["Leviathans","the first monsters, eaters of people","The biblical Leviathan is a sea monster of chaos (Job 41, Psalm 74, Isaiah 27). Hobbes made it an image of the state.","God's first creations, too hungry, so they were locked in Purgatory. They escaped through Castiel. Their leader is Dick Roman.","A righteous man's bone washed in the blood of three fallen: a fallen angel, the King of Hell and an alpha. Borax burns and slows them.","If the boss has too many teeth, it's not a metaphor."],
+"cain":["Cain","the first murderer on earth","The first murderer in the Bible (Genesis 4). God marked him so no one would kill him. The Bible doesn't say what he killed Abel with.","Bearer of the Mark of Cain and maker of the First Blade, the first Knight of Hell. He passed the Mark to Dean.","Died by the First Blade.","The Mark gives power, but its bearer pays for it."],
+"billie":["Billie","a reaper who became Death","Reapers escort the souls of the dead in many traditions: the Grim Reaper in England, the Ankou in Brittany.","A reaper who became the new Death. She keeps Death's library of books recording how everyone ends.","Killed by Jack in season 15.","Death knows how you'll die. Don't argue."],
+"horsemen":["Four Horsemen","War, Famine, Pestilence and Death","Revelation (6:1–8): riders on a white horse, a red one (war), a black one (famine) and a pale one (death).","War, Famine, Pestilence and Death, servants of the Apocalypse. Their rings, joined together, open Lucifer's Cage.","War, Famine and Pestilence are stopped by taking their rings. Death can only be persuaded.","Put the rings on the table and the Cage is yours."],
+"death":["Death","Death itself","Greek Thanatos and the medieval Reaper with a scythe, shaped by the Black Death of the 14th century.","Older than God and maybe outlasting him. Calm, fond of fast food, and one day he'll reap even God.","Only his own Scythe. Dean killed him with it in season 10.","You don't argue with Death. You negotiate."],
+"amara":["The Darkness","God's sister, named Amara","A parallel to primordial chaos: Tiamat for the Babylonians, Chaos in Hesiod. She has no direct biblical counterpart; the show invented her.","God's sister, who existed before creation. He locked her away with the Mark of Cain, and once freed she threatened to erase everything.","She can't be killed. God reconciled with her.","The Darkness isn't evil. It's lonely."],
+"god":["God","the creator of everything, also the writer Chuck","The God of the Abrahamic religions: creator, all-powerful and eternal.","Writer Chuck Shurley, who wrote down the Winchesters' adventures, turned out to be God. In the end he wanted to finish the story his way.","Impossible to kill. Jack took his power.","The author hates it when the characters write themselves. Write anyway."],
+"empty":["The Empty","where dead angels and demons sleep","The closest parallel is Hesiod's Chaos, the 'gap' that existed before everything. The idea of a void before creation appears in many cosmogonies.","A place and a being where dead angels and demons go. It sleeps and hates being woken. It took Castiel after his confession to Dean.","It can't be killed. You can make a deal, trick it or escape.","Better not wake the sleepers."]
+};
+var EN_LORE={
+"spirit":"Vengeful spirits are the foundation of the Winchesters' hunting: most early cases start with them. Hunters tell apart ordinary ghosts, poltergeists and vengeful spirits; over time a spirit forgets who it was and only the rage remains. Sometimes it's held not by bones but by a lock of hair, a drop of blood or an object, and burning the skeleton does nothing. Loved ones became ghosts too: for a while Bobby stayed behind as a spirit tied to his flask.",
+"woman-in-white":"After learning of her husband's affair, Constance Welch drowned her children and then killed herself. Her ghost became the Woman in White on the highway near Jericho. This case is why Dean came to get Sam at Stanford: their father, John, had gone missing. In the end Dean drove the Impala straight into Constance's house, where her children's ghosts were waiting. Back home, Sam found Jessica dying — and decided to hunt again.",
+"bloody-mary":"The spirit of Mary Worthington, murdered in her own home, became trapped in mirrors. She comes for people who hide guilt for someone's death. Sam, blaming himself for Jessica, summoned Mary himself to draw her out. The brothers made the spirit see its own reflection, and it was destroyed along with the mirror.",
+"hookman":"The ghost of preacher Jacob Karns, executed for murder in the 19th century. His silver hook was melted into church silverware. The spirit attacked around the local pastor's daughter Lori, as if punishing the people she secretly judged. The brothers had to find every piece of silver made from the hook and destroy it.",
+"tulpa":"Students made up a legend about Mordechai Murdoch, a killer from an abandoned house in Texas, and posted it on a paranormal website. Thousands of readers believed it, and the legend came to life. The brothers tried to change the story on the site, but the server crashed and they had to burn the house. The episode is remembered for the brothers' prank war and the first appearance of the hapless hunters Harry and Ed.",
+"zombie":"In season 2, a dead girl, Angela, was raised by a man secretly in love with her and began taking revenge. In season 5, the dead of Sioux Falls started coming home to their families, among them Bobby's wife Karen. It was the work of Death, one of the Horsemen. Bobby had to kill his wife a second time.",
+"ghoul":"The most personal ghoul case came in season 5. A pair of ghouls killed Adam Milligan, Sam and Dean's unknown half-brother, and his mother, and one of them took Adam's form to lure the brothers in. Later the real Adam was resurrected by angels as a backup vessel for Michael.",
+"banshee":"A banshee picks people who carry grief and calls them in the voices of those they've lost. Hunters have to resist the most painful thing of all — the voice of someone who's never coming back.",
+"vampire":"Hunter Gordon Walker avenged his sister on vampires and thought they were all the same. But the brothers met Lenore's nest, which had given up human blood. In season 6 vampires turned Dean himself, and he was saved by a cure made from the blood of the vampire who turned him. The Alpha Vampire, the oldest of the line, became the Winchesters' enemy more than once.",
+"werewolf":"In 'Heart', Sam fell for Madison, who didn't know she was a werewolf. There was no cure, and Madison asked Sam to kill her. Later it turned out 'pureblood' werewolves exist who hold their hunger back: hunter Garth married one and became a werewolf himself.",
+"wendigo":"The brothers' first real case after the pilot: hikers were disappearing in the Colorado woods. The wendigo kept its captives alive in an old mine. Sam was still burning for revenge over Jess, and Dean explained the family business's main rule: saving people, hunting things.",
+"rugaru":"Jack Montgomery realised something was wrong when a terrible hunger set in. His father had been a rugaru, and hunter Travis wanted to kill Jack before he turned. Sam saw himself in Jack — someone destined to become a monster — and hoped he'd have a choice. But Jack couldn't hold out.",
+"shapeshifter":"In St. Louis a shapeshifter took Dean's form and committed murders. Dean was declared dead, but the footage remained — and for years the FBI and Agent Henriksen considered the brothers serial killers.",
+"skinwalker":"In season 6 a pack of skinwalkers planted dogs in families across a town, preparing an attack. Sam was soulless at the time, and his cold logic scared Dean more than the monsters did.",
+"kitsune":"As a teenager Sam befriended Amy Pond, and she killed one of her own kind to save him. As an adult Amy killed to save her sick son, and Sam let her go. Dean secretly tracked her down and killed her, and that lie nearly destroyed the brothers' trust.",
+"siren":"A siren posing as FBI agent Nick became the 'brother' Dean felt he was missing, and drugged the brothers into turning on each other. It was defeated thanks to Bobby, and the brothers stayed awkward for a long time about what they'd said in the fight.",
+"wraith":"The brothers checked into a psychiatric hospital posing as patients. A wraith infected Sam with madness, and his anger at his brother surfaced. Dean, meanwhile, admitted to a doctor feelings he usually keeps to himself.",
+"rakshasa":"Soon after John's death the brothers investigated parents dying around a travelling circus. A rakshasa disguised as a clown came in when the children invited it. In the same episode Dean, unable to cope with his grief, smashed the Impala with a crowbar.",
+"shtriga":"As a child Dean was supposed to watch Sam in a motel but stepped out for a moment, and a shtriga nearly killed his brother. John got back in time. Years later Dean finally finished the job — so he'd never make that mistake again.",
+"changeling":"Changelings quietly replaced children in a suburb and drained their mothers' strength. The brothers found the real children alive in the lair and destroyed the changeling mother.",
+"khan-worm":"A worm took over a hunting cabin where Sam, Dean, Bobby, Rufus and the brothers' grandfather Samuel Campbell had gathered. Jumping from body to body, it set the hunters against each other. Rufus died — killed by Bobby while Bobby was under the worm's control.",
+"dragon":"Dragons abducted young women to perform a ritual and free Eve from Purgatory. Against them the hunters needed a special sword forged with dragon's blood.",
+"phoenix":"Castiel sent the brothers to the Wild West in 1861. There they met Samuel Colt, and the phoenix was shot with his revolver. The ash brought back to the present became the only weapon against Eve.",
+"eve":"Eve broke out of Purgatory when Crowley was searching for a way in. In Oregon she created hybrid monsters, and Dean swallowed phoenix ash and offered her his neck. Biting him killed her.",
+"alphas":"Crowley held alphas captive, interrogating them about the way into Purgatory. The Alpha Vampire later became one of the Winchesters' main enemies and played a role in the alternate world story.",
+"witch":"There are many witches in the show, but the main one is Rowena MacLeod, Crowley's mother. First an enemy, then an ally, she came to respect the Winchesters and eventually became Queen of Hell, sacrificing herself for the world. There are also the British Men of Letters, who hunted witches.",
+"fairy":"'Clap Your Hands If You Believe' began as an X-Files parody: people vanished in columns of light. Behind the abductions were fairies and a leprechaun, and Dean saw a tiny fairy that Sam stubbornly couldn't.",
+"jinn":"A djinn showed Dean a world where his mother is alive and Sam is happy with Jess. Dean realised it was an illusion and broke free by 'killing' himself in the dream. Later the brothers met a whole djinn family with a venom that causes nightmares.",
+"golem":"The golem passed to Aaron Bass, grandson of a guardian from a secret Jewish order. The order had fought the Thule necromancers — Nazi Germany's occultists — for generations. Aaron learned to control the golem, and it became his protector.",
+"vanir":"In season 1 Sam fell out with Dean over their father and left. Dean went alone to Burkitsville, where townsfolk sacrificed a pair of travellers to the Vanir every year. On the road Sam met the demon Meg — her first appearance.",
+"trickster":"At first the brothers took the trickster for an ordinary pagan prankster god. In season 3 he trapped Sam in an endless 'Groundhog Day' where Dean died over and over. In season 5 it turned out he was the archangel Gabriel, who had fled his brothers' feuds. He died at Lucifer's hand, then returned in season 13.",
+"demon":"Demons are the show's main enemy: from Meg Masters and Ruby to Hell's whole armies. Ruby gave Sam a knife and got him hooked on demon blood. Meg gradually became almost an ally to Castiel. Dean himself briefly became a demon when the Mark of Cain took over.",
+"crossroads":"Dean sold his soul to a crossroads demon to bring Sam back and got just one year instead of the usual ten. Later the crossroads demons worked for Crowley, once one of them.",
+"hellhound":"In the season 3 finale Dean's time ran out, and hellhounds tore him apart. He spent four months in Hell — forty years there — until Castiel pulled him out.",
+"croatoan":"In the town of River Grove the virus infected residents one after another. Sam turned out to be immune. In season 5 the angel Zachariah showed Dean the future of 2014, where the virus had nearly destroyed the world and Sam had become Lucifer's vessel.",
+"azazel":"In 1983 Azazel killed Mary in Sam's nursery after feeding the baby his blood. For years he groomed 'special children' and set them against each other in a deadly tournament at Cold Oak. It turned out young Mary had once made a deal with him herself to save John's life. In the season 2 finale Dean killed Azazel with the Colt.",
+"lilith":"Lilith held Dean's contract and broke the seals on Lucifer's cage. Ruby spent years preparing Sam to kill her. In the season 4 finale Sam killed Lilith, and her death turned out to be the final seal: Lucifer broke free.",
+"alastair":"For thirty years Alastair tortured Dean in Hell and finally persuaded him to become a torturer himself. That broke the first seal: a righteous man shed blood in Hell. Later the angels held Alastair captive, and Sam destroyed him with the power of his gift.",
+"princes":"Ramiel lived as a recluse guarding the Lance of Michael, which was used to kill him. Dagon guarded the pregnant Kelly Kline, Jack's mother. Asmodeus ruled Hell after Crowley was gone, until the archangel Gabriel killed him.",
+"crowley":"Fergus MacLeod, a 17th-century Scottish tailor, sold his soul, became a crossroads demon and then King of Hell. Nearly cured by Sam with human blood, he was both enemy and ally. In the season 12 finale Crowley sacrificed himself to lock Lucifer away.",
+"knights":"Abaddon travelled from 1958, where she slaughtered the Men of Letters, including the brothers' grandfather, Henry Winchester. She tried to seize Hell, and Dean, taking the Mark of Cain, killed her with the First Blade.",
+"lucifer":"Lucifer rebelled against God, refusing to bow to humans, and was imprisoned by Michael. In season 5 Sam let him in and jumped into the Cage, stopping the Apocalypse. Later Lucifer broke free again, his son Jack was born, and in season 13 Dean killed him with an archangel blade.",
+"angel":"Castiel pulled Dean out of Hell and became family. For the Winchesters he rebelled against Heaven, absorbed the souls of Purgatory, briefly became a 'new God' and accidentally released the Leviathans. He died and came back again and again, until he went to the Empty after confessing his love to Dean.",
+"cupid":"In season 5 a cupid matchmaking couples turned out to be nearly innocent: the holiday killings came from the Horseman Famine, who awakened insatiable hunger in people.",
+"reaper":"The reaper Tessa came for Dean after the car crash at the start of season 2, but John gave his soul for his son. Reapers serve Death, and the best known of them became Billie.",
+"metatron":"Metatron hid on Earth among books for thousands of years. In season 8 he tricked Castiel and cast all the angels out of Heaven, then killed Dean, which let the Mark turn him into a demon. Later he had to help the Winchesters find Chuck.",
+"nephilim":"Kelly Kline, Jack's mother, died giving birth. Jack was born almost grown, and the Winchesters and Castiel raised him as a son. He lost and regained his soul, and in the season 15 finale, absorbing Chuck's power, he became the new God.",
+"archangels":"Michael chose Dean as his vessel, Lucifer chose Sam. The final battle never happened: Sam jumped into the Cage, dragging Michael with him. Castiel killed Raphael; Gabriel died and returned. In season 13 the Michael from the alternate world took over Dean's body.",
+"pagan":"At the Elysian Fields Hotel the gods gathered to discuss the Apocalypse and wanted to sacrifice Sam and Dean. Lucifer showed up and killed almost all of them. Gabriel, long in love with Kali, died protecting her.",
+"leviathans":"Castiel absorbed the souls of Purgatory, and the Leviathans escaped through his body. Their leader Dick Roman built a corporation to turn humans into livestock. Dean killed him with a righteous man's bone, but the blast sent him and Cas to Purgatory.",
+"cain":"Cain became a demon to save his brother Abel's soul, and only stopped killing when he met Colette. He passed the Mark to Dean to kill Abaddon. Later the Mark broke Cain, and Dean killed him with the First Blade.",
+"billie":"Billie was a reaper who disliked the Winchesters for their endless resurrections. In season 12 Castiel killed her, and by an ancient rule she became the new Death. In season 15 she tried to stop Chuck using the brothers, but her plans turned against everyone.",
+"horsemen":"In season 5 the Horsemen came in Lucifer's wake. War set people against each other, Famine awakened insatiable hunger, Pestilence prepared the Croatoan virus. Death handed over his ring himself so Sam and Dean could lock Lucifer away.",
+"death":"Death returned Sam's soul and once let Dean be Death for a day. He said that one day he would reap even God. In season 10 Dean killed him with the Scythe when Death offered him exile with the Mark.",
+"amara":"Amara broke free when Dean got rid of the Mark of Cain. She was drawn to Dean, since the Mark had bound them. She sought revenge on her brother for imprisoning her, but in the season 11 finale they reconciled, and in thanks Amara gave Dean back his mother.",
+"god":"Chuck Shurley appeared in season 4 as a prophet writing the brothers' adventures as books. In season 11 he revealed he was God. In season 15 he decided to end the story, destroying parallel worlds. Jack absorbed his power, and Chuck was left an ordinary mortal.",
+"empty":"The Empty woke when Castiel arrived and sent him back just to be left to sleep. Later Cas made a deal to save Jack: the Empty would take him at the moment of true happiness. In season 15 Cas confessed his love to Dean — and the Empty took him at once."
+};
+/* id: [name, role, actor, story, personality, [moments], ending] */
+var EN_HEROES={
+"dean":["Dean Winchester","Older brother, hunter","Jensen Ackles","Born in 1979 in Lawrence, Kansas. When he was four, the demon Azazel killed his mother, and Dean carried baby Sam out of the burning house. Their father, John, raised him like a soldier: hunting, weapons, looking after his brother. Dean's whole life is devoted to his family and to anyone he can save.","A joker with a heavy heart. Loves classic rock, pie, burgers and his Impala. Hides his pain behind bravado, believes he doesn't deserve saving, yet sacrifices himself without hesitation.",["Sold his soul to a crossroads demon to bring Sam back and spent 40 years in Hell, by Hell's time.","Was the chosen vessel of the archangel Michael, and refused.","Spent a year fighting in Purgatory alongside Castiel.","Took the Mark of Cain and became a demon for a while."],"Died in the final episode on an ordinary vampire hunt. Went to the rebuilt Heaven, where Bobby met him, and later Sam."],
+"sam":["Sam Winchester","Younger brother, hunter","Jared Padalecki","Born in 1983. At six months old Azazel fed him his blood, making him one of the 'special children'. Sam dreamed of a normal life and went to study law at Stanford, but Jessica's death pulled him back into hunting.","Smart, well-read, a researcher. Believes in people and in redemption, even for monsters. His greatest fear is the darkness inside himself.",["Drank demon blood under Ruby's influence and broke the final seal.","Let Lucifer in and jumped into the Cage, stopping the Apocalypse.","Came back without his soul and lived for almost a year as a cold hunter.","Undertook the Trials to close the gates of Hell forever."],"Lived a long life, raised a son he named Dean, and died of old age. In Heaven he met his brother on a bridge."],
+"castiel":["Castiel","Angel of the Lord","Misha Collins","The angel who pulled Dean out of Hell — his handprint stayed burned on Dean's shoulder. He came as a soldier of Heaven but chose the Winchesters and humanity, turning against his own again and again.","Blunt, serious, at first baffled by jokes and human habits. Loyal to the end. Known for his trench coat and backwards tie.",["Rebelled against Heaven to stop the Apocalypse.","Absorbed the souls of Purgatory, declared himself God and released the Leviathans.","Lost his Grace and lived as a human.","Raised Jack as his son."],"Confessed his love to Dean and was taken by the Empty. Later returned with Jack and helped build the new Heaven."],
+"bobby":["Bobby Singer","Hunter, the brothers' adoptive father","Jim Beaver","A hunter from Sioux Falls who runs a salvage yard. He became a hunter when a demon possessed his wife Karen and he had to kill her. He became a real father to Sam and Dean, and his house their refuge.","Grumpy and sharp-tongued, calls everyone an 'idjit'. A huge library, contacts across the country and a wall of phones where he plays FBI supervisors.",["Spent time in a wheelchair and got his legs back through a deal with Crowley.","Shot by Dick Roman, he stayed behind as a ghost tied to his flask.","Escaped Hell and made it to Heaven.","His alternate-world double arrived in season 13."],"Met Dean in Heaven in the final episode and told him how Jack and Cas had made Heaven better."],
+"john":["John Winchester","The brothers' father","Jeffrey Dean Morgan","A Marine, a mechanic and a happy family man until a demon killed Mary. After that he devoted his life to revenge, dragging his sons from motel to motel and turning them into hunters. His journal became the brothers' main reference.","Stern, closed-off, obsessed. He loved his sons but gave orders more often than he talked to them.",["Went missing at the start of the show, leaving only coordinates in his journal.","Gave his soul to Azazel to save the dying Dean.","Escaped Hell through the gate in the season 2 finale.","Met his sons again in the 300th episode."],"Found peace. His story with his family ended in reconciliation."],
+"mary":["Mary Winchester","The brothers' mother","Samantha Smith","Mary Campbell grew up in a family of hunters and dreamed of a normal life. To save John's life she made a deal with Azazel without knowing the price. In 1983 she died in Sam's nursery.","A strong, independent, well-trained hunter. She didn't always know how to be a mother to grown sons.",["Resurrected by Amara in the season 11 finale.","Worked with the British Men of Letters.","Got trapped in the alternate world.","Died at Jack's hands when he had lost his soul."],"Found peace in Heaven beside John."],
+"jack":["Jack Kline","Nephilim, Lucifer's son","Alexander Calvert","Son of Lucifer and Kelly Kline, born almost fully grown. The Winchesters and Castiel took him in as family. He learned to be human and lost and regained his soul.","Naive, kind, curious, loves nougat. His power is immense, but he desperately wants to be good.",["Accidentally killed Mary after losing his soul.","Killed by Chuck, he returned from the Empty as a weapon against him.","Absorbed Chuck's power in the final battle.","Became the new God."],"In the finale he became a God who doesn't interfere but helps. Together with Cas he rebuilt Heaven."],
+"charlie":["Charlie Bradbury","Hacker and hunter","Felicia Day","A brilliant hacker, fantasy fan and queen of LARP. She helped the brothers against the Leviathans, travelled to Oz and became a little sister to Dean.","Funny, brave, a geek to the core. With her the Winchesters could just have fun.",["Hacked Dick Roman's company.","Fought the Wicked Witch of the West in Oz.","Found the Book of the Damned to remove the Mark."],"Killed by the Stynes family in season 10. Her alternate-world double later joined the brothers."],
+"kevin":["Kevin Tran","Prophet","Osric Chau","A straight-A student dreaming of Princeton turned out to be a Prophet able to read the Word of God tablets. He translated them to close Hell and find weapons against the Leviathans.","Exhausted, sarcastic, but brave. Other people's wars wrecked his life.",["Translated the Leviathan tablet.","Translated the Demon tablet for the Trials.","Hid from Crowley in the bunker."],"Killed by Gadreel while he possessed Sam's body. Later returned as a ghost and found peace."],
+"jody":["Jody Mills","Sheriff and hunter","Kim Rhodes","Sheriff of Sioux Falls who lost her son and husband. After meeting the brothers she became a hunter and adoptive mother to girls who survived the supernatural: Claire, Alex and others.","Sensible, warm, resilient. A mother to the 'wayward sisters' and a friend to the Winchesters.",["Lived through her dead son coming back.","Built her own team of hunters.","Fought side by side with the brothers many times."],"Keeps hunting and protecting her family."],
+"harvelle":["Ellen & Jo Harvelle","Owners of a hunters' bar","Samantha Ferris, Alona Tal","Ellen ran the Roadhouse, where hunters gathered. Her husband died on a hunt with John. Her daughter Jo dreamed of her father's work despite her mother forbidding it.","Ellen is strict and motherly, Jo is eager to fight. Both are part of the hunting family.",["The Roadhouse burned down in season 2.","Jo went hunting against Ellen's wishes.","Both fought against Lucifer's army."],"Died together in season 5, blowing up a hardware store full of hellhounds to give the brothers a chance."],
+"garth":["Garth Fitzgerald IV","Hunter","DJ Qualls","A clumsy but kind hunter. After Bobby's death he coordinated hunters in his place for a while.","An optimist who loves hugs and talking through his sock puppet, Mr. Fizzles.",["Took Bobby's place as hunters' coordinator.","Married the werewolf Bess.","Became a werewolf himself without losing his kindness."],"Lives with his family and sometimes helps hunters."],
+"rowena":["Rowena MacLeod","Witch, Crowley's mother","Ruth Connell","A powerful Scottish witch who abandoned her son Fergus. First an enemy, then an ally of the brothers.","Vain, witty, selfish, but over the years she became honest and brave.",["Hunted for the Book of the Damned.","Held Lucifer back and was killed by him.","Became Queen of Hell."],"Sacrificed herself to lock away the ghosts that escaped from Hell and became Queen of Hell."],
+"impala":["The Impala, 'Baby'","The Winchesters' car","—","A 1967 Chevrolet Impala, the brothers' home on wheels. The trunk holds the arsenal, and inside are traces of childhood: a toy soldier in the ashtray and Lego pieces in the vent.","Loyal, classic, always with rock tapes in the glovebox.",["Dean rebuilt her almost from scratch after the season 2 crash.","Memories of the car helped Sam overpower Lucifer.","A whole episode is told from her point of view."],"Carried Dean into Heaven, where the open road was waiting."],
+"adam":["Adam Milligan","Sam and Dean's half-brother","Jake Abel","The son of John Winchester and Kate Milligan, whom the brothers didn't know about for a long time. John secretly visited him and taught him ordinary things, not hunting. Adam and his mother were killed by ghouls, and the angels resurrected him as a backup vessel for Michael when Dean refused.","An ordinary guy whose normal life was taken away. Resentful of the brothers who got their father whole, even if only through hunting.",["Met the brothers in season 4, but it was a ghoul in his form — the real Adam was already dead.","Resurrected by angels and agreed to become Michael's vessel.","In the season 5 finale fell into the Cage with Michael, Lucifer and Sam."],"Sam got out of the Cage, but Adam stayed there for years. His story continued in season 15."],
+"samuel":["Samuel Campbell","The brothers' maternal grandfather","Mitch Pileggi","Head of the old Campbell hunting family and Mary's father. Azazel killed him in 1973. In season 6 Crowley resurrected Samuel, and he caught alphas for Crowley hoping to get his daughter back in return.","A hard, calculating old-school hunter. Put the goal above people, even his own grandsons.",["Met Dean, sent back to 1973, without knowing he was his grandson.","Brought back to life by Crowley and secretly worked for him.","Handed Sam and Dean over to Crowley for a chance to bring Mary back."],"Died at Dean's hand when the Khan worm took over his body."],
+"henry":["Henry Winchester","The brothers' grandfather, Man of Letters","Gil McKinney","An initiated member of the Men of Letters, a secret order of occult scholars. In 1958, escaping the Knight of Hell Abaddon, he travelled to 2013 and met his grandsons. Through him the brothers learned about the order and got the key to the bunker that became their home.","A scholar, noble and reserved. He worried about leaving young John alone.",["Escaped Abaddon through time.","Told his grandsons about the Men of Letters.","Helped capture Abaddon."],"Killed by Abaddon in 2013. That's why John grew up without a father."],
+"meg":["Meg Masters","Demon, later Cas's ally","Nicki Aycox, Rachel Miner","In season 1 she appeared as a college student but turned out to be a demon serving Azazel. In season 2 she possessed Sam and used his body against hunters. Later she lost faith in Lucifer and became an unexpected ally of Castiel, whom she nicknamed Clarence.","Sarcastic and cruel, but with her own principles. Her attachment to Cas is one of the show's most surprising threads.",["Possessed Sam and hunted his friends.","Sided with the Winchesters against Crowley.","Looked after Cas when he lost his mind."],"Killed by Crowley in season 8, buying Sam and Cas time to escape with the angel tablet."],
+"ruby":["Ruby","Demon, Sam's mentor","Katie Cassidy, Genevieve Cortese","She appeared in season 3 as a demon who helps hunters and gave the brothers a knife that kills demons. In season 4 she grew close to Sam and got him hooked on demon blood, promising power against Lilith. In truth she served Lucifer and was leading Sam to the final seal.","Cunning and persuasive, good at seeming like an ally. One of the show's most successful manipulators.",["Gave the brothers the demon-killing knife.","Taught Sam to use his power.","Led Sam to kill Lilith, opening Lucifer's Cage."],"Dean killed her with her own knife in the season 4 finale."],
+"benny":["Benny Lafitte","Vampire, Dean's friend from Purgatory","Ty Olsson","A vampire Dean met in Purgatory. He knew the way to the portal, and Dean carried his soul out to Earth. Benny tried to live without killing people, though the hunger never left him, and that put Dean between his brother and his friend.","Honest, loyal, old-fashioned and noble. In Purgatory, the friend Dean could rely on most.",["Led Dean out of Purgatory.","Gave up human blood.","Went back to Purgatory voluntarily to lead Sam out with Bobby's soul."],"Stayed in Purgatory so Sam and Bobby could get out."],
+"zachariah":["Zachariah","Angel middle manager","Kurt Fuller","A high-ranking angel who ran the Apocalypse plan. He let Lucifer go free so that Michael would win the prophesied battle, and did everything to break Dean into agreeing to be the vessel.","A polished heavenly bureaucrat, cruel and cynical. Proof that angels aren't fairy godmothers.",["Showed Dean the future of 2014, where the world had fallen.","Was behind the breaking of the seals.","Tortured the brothers to make them comply."],"Dean killed him with an angel blade in season 5."],
+"gadreel":["Gadreel","Fallen angel","Tahmoh Penikett","The guardian of Eden who let the serpent, Lucifer, into the Garden. For that he spent millennia in Heaven's prison. After the angels fell, Dean secretly let him possess the dying Sam to heal him. Under Metatron's influence Gadreel killed Kevin Tran.","An angel tormented by guilt, desperate for redemption.",["Healed Sam while living in his body without his knowledge.","Killed Kevin on Metatron's orders.","Switched to Castiel's side."],"Sacrificed himself trying to atone for his guilt."],
+"claire":["Claire Novak","Hunter, Jimmy Novak's daughter","Kathryn Newton","Daughter of Jimmy Novak, whose body became Castiel's vessel. As a child she briefly became an angel's vessel herself. After losing her father Claire grew up angry and alone until Jody Mills took her in. In time Claire became a hunter.","Prickly, impulsive, fiercely brave. Under the armour is a girl who missed having a family.",["Hated Cas because of her father, but eventually forgave him.","Became part of Jody's family.","Hunted with Jody's team."],"Keeps hunting."],
+"donna":["Donna Hanscum","Sheriff and hunter","Briana Buckmaster","A good-natured sheriff from Minnesota who learned the truth about monsters working with the Winchesters. She became friends with Jody Mills and took up hunting herself.","Sunny, giggly, with an unmistakable accent. And dangerous when it comes to protecting her people.",["Learned the truth about monsters on a case with the brothers.","Became friends with Jody and started hunting.","Helped the brothers out more than once."],"Still a sheriff, and still hunting."],
+"ash":["Ash","Genius hacker from the bar","Chad Lindberg","A genius with a mullet who lived at Ellen's Roadhouse. His computer system tracked signs of demonic activity across the country.","A carefree partier on the outside, a scientist inside.",["Found a way to track demons.","Helped the brothers get on Azazel's trail."],"Died when the Roadhouse burned in season 2. In season 5 the brothers met him in Heaven."],
+"rufus":["Rufus Turner","Hunter, Bobby's friend","Steven Williams","A seasoned hunter and Bobby's longtime friend, bound to him by a shared secret from the past. A grumpy loner who knew more than most.","Blunt, cautious, values his freedom over other people's problems.",["Helped the brothers in season 3.","Went through plenty of cases with Bobby.","Got trapped with the Khan worm."],"Died in season 6 at the hands of Bobby, whose body the Khan worm had taken over."],
+"gordon":["Gordon Walker","Vampire hunter","Sterling K. Brown","A fanatical hunter who killed his own sister after she was turned into a vampire. He saw Sam as a threat because of his demon connection and started hunting him.","Ruthless and certain he's right. For him there's no such thing as a 'good monster'.",["Hunted Lenore's nest, which didn't harm people.","Tried to kill Sam.","Was turned into a vampire himself."],"Beheaded by Sam in season 3."],
+"henriksen":["Victor Henriksen","FBI agent","Charles Malik Whitfield","An agent who chased the brothers for years as serial killers. When he finally caught them, he saw demons with his own eyes and took their side.","A stubborn, smart professional who can admit a mistake.",["Followed the brothers across the country.","Arrested them and saw demons.","Took the Winchesters' side."],"Killed by Lilith in season 4."],
+"ketch":["Arthur Ketch","Hitman for the British order","David Haydn-Jones","A professional killer for the British chapter of the Men of Letters, used to wiping out monsters without asking questions. He was an enemy and an ally of the Winchesters by turns, and worked with Mary.","Cold, ironic, skilled. Loyal first of all to himself.",["Worked for the British Men of Letters.","Faked his own death.","Switched to the brothers' side."],"Helped the Winchesters out more than once in the later seasons."],
+"becky":["Becky Rosen","Fan of Chuck's books","Emily Perkins","The most devoted fan of the 'Supernatural' book series by the prophet Chuck Shurley. When she learned the brothers were real she helped them, and in season 7 she slipped Sam a potion and married him.","Excitable, naive, brave in her own way.",["Passed Chuck's message to the brothers.","Learned the brothers were real.","Married Sam with the help of a potion."],"In the end she let Sam go."]
+};
+var EN_TIMELINE={
+dean:["Searches with Sam for their missing father, hunting by his journal.","Their father gives his life for him; Dean sells his soul to bring Sam back.","The last year before Hell; hellhounds take him.","Castiel pulls him out of Hell. Dean learns he broke the first seal.","Refuses to be Michael's vessel; Sam jumps into the Cage.","A year of normal life with Lisa and Ben, then back to hunting.","Leviathans and Bobby's death. Kills Dick Roman and lands in Purgatory.","A year in Purgatory with Benny and Cas. Sam undertakes the Trials.","Saves Sam with Gadreel's help. Takes the Mark of Cain and becomes a demon.","Sam restores his humanity. Dean kills Death.","The Darkness, God and his mother's return.","The British Men of Letters, Lucifer and Jack's birth.","Grieving Cas and his mother. Michael takes over Dean's body.","Fighting Michael inside himself; Mary's death.","War with Chuck, Cas taken by the Empty. The last hunt."],
+sam:["Leaves Stanford after Jessica's death; his visions begin.","Learns Azazel's plan; dies at Cold Oak, and Dean brings him back.","Tries to save Dean from his deal and grows close to Ruby.","Demon blood and power. Kills Lilith and frees Lucifer.","Agrees to be Lucifer's vessel and jumps into the Cage.","Comes back without his soul; Death returns it with a wall in his memory.","The wall breaks and Lucifer hallucinations torment him. Cas takes on his madness.","A year of normal life with Amelia, then the Trials to close Hell.","Gadreel in his body; a rift with Dean.","Searches for a way to remove the Mark and finds the Book of the Damned.","Visions tied to the Darkness, and meeting God.","The British Men of Letters and the hunt for Lucifer.","Gathers hunters from the alternate world.","Leader of the hunters, searching for Dean, taken by Michael.","War with Chuck. A long life after the finale."],
+castiel:["Pulls Dean out of Hell and serves Heaven.","Rebels against the angels, looks for God, loses his powers.","Civil war in Heaven; absorbs the souls of Purgatory.","Declares himself God, releases the Leviathans, loses his memory, takes on Sam's madness.","Purgatory, captivity under Naomi, Metatron's deception.","Becomes human, then lives on stolen Grace.","His Grace fades; he barely survives Rowena's curse.","Lets Lucifer possess him.","Stays close to Kelly and the coming Jack; dies at Lucifer's hand.","Returns from the Empty.","Makes a deal with the Empty for Jack.","Confesses his love to Dean and is taken by the Empty."]
+};
+/* name, works on, text — same order as ARSENAL */
+var EN_ARSENAL=[
+["Salt","Ghosts, demons","Salt's cleansing power is known in many cultures: in Japan salt is sprinkled on the threshold after funerals, and in Rome salt was used in purification rites."],
+["Iron","Ghosts, fairies","In British folklore iron drives away fairies and evil spirits. A horseshoe over the door is an echo of that belief."],
+["Silver","Werewolves, shapeshifters, wraiths","The metal of the moon and purity. The legend of the Beast of Gévaudan made it famous against monsters."],
+["Holy water","Demons","Blessed water is a Christian protection against evil. It burns demons."],
+["Fire","Remains, wendigos, rugarus","In every culture fire is the final cleansing."],
+["Devil's trap","Demons","A pentagram in a circle. In Goethe's Faust, Mephistopheles can't leave while a pentagram is drawn on the threshold."],
+["Dead man's blood","Vampires","Weakens and paralyses a vampire, buying time for the machete."],
+["The Colt","Almost anything","A revolver made by the hunter Samuel Colt. It kills almost any creature, except a few of the most powerful."],
+["Ruby's knife","Demons","A demonic blade that kills demons. For a long time it was the brothers' main weapon."],
+["Brass dagger","Rakshasas","Only pure brass can kill a rakshasa."],
+["Angel blade","Angels, demons","In Genesis (3:24) cherubim guard Eden with a flaming sword. The blade is their legacy."],
+["First Blade","Knights of Hell","The jawbone Cain used to kill Abel. It only works in the hand of the one who bears the Mark."],
+["Death's Scythe","All living things, even Death","The image of the Reaper with a scythe took shape after the Black Death of the 14th century."]
+];
+var EN_ACTORS_SEASON=function(s){
+  if(!s)return s;var m;
+  if(s==="Разные сезоны")return "Various seasons";
+  if((m=s.match(/^С (.+) сезонов$/)))return "Since seasons "+m[1];
+  if((m=s.match(/^С (.+) сезона$/)))return "Since season "+m[1];
+  if((m=s.match(/^Сезоны (.+)$/)))return "Seasons "+m[1];
+  if((m=s.match(/^(.+) сезоны$/)))return "Seasons "+m[1];
+  if((m=s.match(/^(.+) сезон$/)))return "Season "+m[1];
+  return s;
+};
+function applyEN(){
+  window.KILLSP={};
+  var SPRE_RU=/сезон|убил|убит|погиб|уничтожил|пожертвов|забрал|финал/i;
+  DATA.forEach(function(r){
+    if(SPRE_RU.test(r[9]))KILLSP[r[0]]=true;
+    var e=EN_DATA[r[0]];if(!e)return;
+    r[1]=e[0];r[2]=e[1];r[6]=EN_ACTORS_SEASON(r[6]);r[7]=e[2];r[8]=e[3];r[9]=e[4];r[10]=e[5];
+  });
+  Object.keys(EN_LORE).forEach(function(k){LORE[k]=EN_LORE[k];});
+  HEROES.forEach(function(r){var e=EN_HEROES[r[0]];if(!e)return;r[1]=e[0];r[2]=e[1];r[3]=e[2];r[6]=e[3];r[7]=e[4];r[8]=e[5];r[9]=e[6];});
+  Object.keys(EN_TIMELINE).forEach(function(k){var t=TIMELINE[k];if(!t)return;t.forEach(function(row,i){if(EN_TIMELINE[k][i])row[1]=EN_TIMELINE[k][i];});});
+  ARSENAL.forEach(function(a,i){var e=EN_ARSENAL[i];if(e){a[0]=e[0];a[2]=e[1];a[3]=e[2];}});
+  Object.keys(EN_CATS).forEach(function(k){CATS[k]=EN_CATS[k];});
+  Object.keys(EN_HGROUPS).forEach(function(k){HGROUPS[k]=EN_HGROUPS[k];});
+  [1,2,3,4].forEach(function(i){DANGER[i]=EN_DANGER[i];});
+}
+if(window.LANG==="en")applyEN();
 (function(){
+var RU_UI={mythH:"Откуда легенда",showH:"Какой он в сериале",loreH:"Его история в сериале",killH:"Как убить",storyH:"История",charH:"Характер",tlH:"По сезонам",momH:"Главное",fateH:"Чем всё закончилось",reveal:"Показать спойлер",anyThreat:"Любая угроза",allTypes:"Все типы",all:"Все",monCount:"Монстров в дневнике: ",heroCount:"Героев в дневнике: ",found:"Найдено: ",of:" из ",emptyMon:"В дневнике ничего не нашлось.",reset:"Сбросить фильтры",emptyHero:"Никого не нашлось.",threat:"Угроза: ",prev:"Назад",next:"Дальше",actor:"Актёр: ",seasons:"Сезоны ",xl:"Ещё о них в разделе монстров:",vs:"Против: ",spOn:"Без спойлеров",spOff:"Спойлеры",spShown:"показаны",spHidden:"скрыты",close:"Закрыть"};
+var EN=window.LANG==="en";
+function T(k){return (EN?EN_UI:RU_UI)[k];}
+if(EN){
+  document.documentElement.lang="en";document.title=EN_STATIC.title;
+  document.querySelectorAll("[data-i18n]").forEach(function(el){var v=EN_STATIC[el.getAttribute("data-i18n")];if(v!=null)el.textContent=v;});
+  document.querySelectorAll("[data-i18n-html]").forEach(function(el){var v=EN_STATIC[el.getAttribute("data-i18n-html")];if(v!=null)el.innerHTML=v;});
+  document.querySelectorAll("[data-i18n-ph]").forEach(function(el){var v=EN_STATIC[el.getAttribute("data-i18n-ph")];if(v!=null)el.setAttribute("placeholder",v);});
+  document.querySelectorAll("[data-i18n-aria]").forEach(function(el){el.setAttribute("aria-label",T(el.getAttribute("data-i18n-aria")));});
+}
+(function(){var b=document.getElementById("langtog");if(!b)return;b.textContent=EN?"RU":"EN";b.setAttribute("aria-label",EN?"Переключить на русский":"Switch to English");
+  b.addEventListener("click",function(){var l=EN?"ru":"en",ok=false;try{localStorage.setItem("spn-lang",l);ok=localStorage.getItem("spn-lang")===l;}catch(e){}
+    var u=new URL(location.href);if(ok&&!u.searchParams.has("lang")){location.reload();return;}u.searchParams.set("lang",l);location.href=u.toString();});})();
 var reduce=!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
 var HIDE=false,SPKEY="spn-spoilers",spChoice=null;
 try{spChoice=localStorage.getItem(SPKEY);}catch(e){}
 if(spChoice==="hide")HIDE=true;
 var SPRE=/сезон|убил|убит|погиб|уничтожил|пожертвов|забрал|финал/i;
-function spSec(title,inner,cls){return '<div class="sec spoil'+(cls?' '+cls:'')+(HIDE?' veiled':'')+'"><h4>'+title+'</h4>'+inner+'<button type="button" class="reveal">Показать спойлер</button></div>';}
+function spSec(title,inner,cls){return '<div class="sec spoil'+(cls?' '+cls:'')+(HIDE?' veiled':'')+'"><h4>'+title+'</h4>'+inner+'<button type="button" class="reveal"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>'+T('reveal')+'</button></div>';}
 (function(){try{var c=document.createElement("canvas");c.width=c.height=128;var x=c.getContext("2d"),d=x.createImageData(128,128);
   for(var i=0;i<d.data.length;i+=4){var v=(Math.random()*255)|0;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255;}x.putImageData(d,0,0);
   document.documentElement.style.setProperty("--noise","url("+c.toDataURL("image/png")+")");}catch(e){}})();
@@ -1051,7 +1333,7 @@ function icon(n){return '<svg viewBox="0 0 48 48" class="ic" aria-hidden="true">
 function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
 function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 var TINT={1:"95,155,130",2:"210,160,70",3:"210,105,50",4:"190,40,35",family:"215,170,95",hunters:"120,160,185",super:"190,190,225"};
-var DNAME={1:"Низкая",2:"Средняя",3:"Высокая",4:"Смертельная"};
+var DNAME=EN?EN_DNAME:{1:"Низкая",2:"Средняя",3:"Высокая",4:"Смертельная"};
 
 function photoHTML(id,ic,tint){
   var r=rng(hash(id)),x1=15+r()*70,y1=15+r()*60,x2=10+r()*80,y2=40+r()*50,lk=r()>.55;
@@ -1059,7 +1341,7 @@ function photoHTML(id,ic,tint){
    "radial-gradient(75% 40% at "+x2.toFixed(0)+"% "+y2.toFixed(0)+"%, rgba(200,212,218,.13), transparent 72%),"+
    (lk?"linear-gradient("+(r()*360).toFixed(0)+"deg, rgba(255,170,90,.12), transparent 40%),":"")+
    "radial-gradient(130% 100% at 50% 42%, #1b2528 0%, #080a0b 78%)";
-  return '<span class="ph" style="background:'+bg+';--glow:rgba('+tint+',.95)">'+icon(ic)+(CAN_PHOTOS&&!MISSING[id]?'<img src="img/'+id+'.'+(FOUND[id]||EXTS[0])+'" data-id="'+id+'" data-ext="'+(FOUND[id]||EXTS[0])+'" alt="" loading="lazy">':'')+'<span class="gr"></span></span>';
+  return '<span class="ph" style="background:'+bg+';--glow:rgba('+tint+',.95)">'+icon(ic)+(CAN_PHOTOS&&!MISSING[id]?'<img src="img/'+id+'.'+(FOUND[id]||EXTS[0])+'" data-id="'+id+'" data-ext="'+(FOUND[id]||EXTS[0])+'" alt="" loading="lazy" decoding="async">':'')+'<span class="gr"></span></span>';
 }
 function polHTML(kind,id,ic,tint,cap,tag,lvl,i){
   var r=rng(hash(id+"r"));var rot=(r()*5-2.5).toFixed(2),tr=(r()*8-4).toFixed(1);
@@ -1071,17 +1353,18 @@ var EXTS=["jpg","jpeg","png","webp","heic","avif","JPG","JPEG","PNG","WEBP","HEI
 function wireImgs(root){
   root.querySelectorAll(".ph img").forEach(function(img){
     var id=img.dataset.id,first=img.dataset.ext,order=[first].concat(EXTS.filter(function(e){return e!==first;})),k=0;
-    function next(){
-      k++;
-      if(k>=order.length){MISSING[id]=true;img.remove();return;}
-      img.src="img/"+id+"."+order[k];
+    var probing=false;
+    function won(e){FOUND[id]=e;var i=EXTS.indexOf(e);if(i>0){EXTS.splice(i,1);EXTS.unshift(e);}}
+    function probeAll(){
+      if(probing)return;probing=true;var left=order.length-1,done=false;
+      order.slice(1).forEach(function(e){var t=new Image();t.decoding="async";
+        t.onload=function(){if(done)return;done=true;won(e);img.src=t.src;};
+        t.onerror=function(){if(--left===0&&!done){MISSING[id]=true;img.remove();}};
+        t.src="img/"+id+"."+e;});
     }
-    img.addEventListener("error",next);
-    img.addEventListener("load",function(){
-      var e=order[k];FOUND[id]=e;
-      var i=EXTS.indexOf(e);if(i>0){EXTS.splice(i,1);EXTS.unshift(e);}
-    },{once:true});
-    if(img.complete&&img.naturalWidth===0&&img.getAttribute("src"))next();
+    img.addEventListener("error",probeAll);
+    img.addEventListener("load",function(){img.classList.add("ld");if(!FOUND[id])won(img.src.split(".").pop());});
+    if(img.complete){if(img.naturalWidth>0)img.classList.add("ld");else if(img.getAttribute("src"))probeAll();}
   });
 }
 
@@ -1106,9 +1389,9 @@ var state={q:"",d:0,c:"",g:""},visible=[],hvisible=[];
 function chip(p,html,key,val){var b=document.createElement("button");b.type="button";b.className="chip";b.innerHTML=html;b.dataset.key=key;b.dataset.val=String(val);
   b.addEventListener("click",function(){state[key]=val;sync();key==="g"?renderHeroes():renderList();});p.appendChild(b);}
 var cD=document.getElementById("chipsD"),cC=document.getElementById("chipsC"),cH=document.getElementById("chipsH");
-chip(cD,"Любая угроза","d",0);[1,2,3,4].forEach(function(i){chip(cD,'<span class="dot lvl'+i+'" style="background:var(--c)"></span>'+DNAME[i],"d",i);});
-chip(cC,"Все типы","c","");Object.keys(CATS).forEach(function(k){chip(cC,CATS[k],"c",k);});
-chip(cH,"Все","g","");Object.keys(HGROUPS).forEach(function(k){chip(cH,HGROUPS[k],"g",k);});
+chip(cD,T("anyThreat"),"d",0);[1,2,3,4].forEach(function(i){chip(cD,'<span class="dot lvl'+i+'" style="background:var(--c)"></span>'+DNAME[i],"d",i);});
+chip(cC,T("allTypes"),"c","");Object.keys(CATS).forEach(function(k){chip(cC,CATS[k],"c",k);});
+chip(cH,T("all"),"g","");Object.keys(HGROUPS).forEach(function(k){chip(cH,HGROUPS[k],"g",k);});
 function sync(){[cD,cC,cH].forEach(function(p){Array.prototype.forEach.call(p.children,function(b){b.setAttribute("aria-pressed",String(String(state[b.dataset.key])===b.dataset.val));});});}
 sync();
 
@@ -1120,13 +1403,13 @@ function renderList(){
     if(state.d&&r[4]!==state.d)return false;if(state.c&&r[3]!==state.c)return false;
     return match(q,[r[1],r[2],r[7],r[8],r[9],LORE[r[0]]||""]);
   }).sort(function(a,b){return a[4]-b[4];});
-  document.getElementById("count").textContent=visible.length===DATA.length?"Монстров в дневнике: "+DATA.length:"Найдено: "+visible.length+" из "+DATA.length;
-  if(!visible.length){listEl.innerHTML='<p class="empty">В дневнике ничего не нашлось.<button type="button" id="rs">Сбросить фильтры</button></p>';
+  document.getElementById("count").textContent=visible.length===DATA.length?T("monCount")+DATA.length:T("found")+visible.length+T("of")+DATA.length;
+  if(!visible.length){listEl.innerHTML='<p class="empty">'+T('emptyMon')+'<button type="button" id="rs">'+T('reset')+'</button></p>';
     document.getElementById("rs").onclick=resetAll;return;}
   var h="";
   [1,2,3,4].forEach(function(d){
     var g=visible.filter(function(r){return r[4]===d;});if(!g.length)return;
-    h+='<div class="group"><div class="ghead"><h3>'+DANGER[d].name+'</h3><span class="stamp lvl'+d+'">Угроза: '+DNAME[d]+'</span></div><p class="gdesc">'+DANGER[d].desc+'</p><ul class="pgrid">';
+    h+='<div class="group"><div class="ghead"><h3>'+DANGER[d].name+'</h3><span class="stamp lvl'+d+'">'+T('threat')+DNAME[d]+'</span></div><p class="gdesc">'+DANGER[d].desc+'</p><ul class="pgrid">';
     g.forEach(function(r,i){h+=polHTML("id",r[0],r[5],TINT[d],r[1],CATS[r[3]],d,i);});
     h+='</ul></div>';
   });
@@ -1135,14 +1418,31 @@ function renderList(){
 function renderHeroes(){
   var q=state.q.trim().toLowerCase();
   hvisible=HEROES.filter(function(r){if(state.g&&HGROUP[r[0]]!==state.g)return false;return match(q,[r[1],r[2],r[3],r[6],r[7],r[8].join(" "),r[9]]);});
-  document.getElementById("hcount").textContent=hvisible.length===HEROES.length?"Героев в дневнике: "+HEROES.length:"Найдено: "+hvisible.length+" из "+HEROES.length;
+  document.getElementById("hcount").textContent=hvisible.length===HEROES.length?T("heroCount")+HEROES.length:T("found")+hvisible.length+T("of")+HEROES.length;
   var h="";hvisible.forEach(function(r,i){var g=HGROUP[r[0]];h+=polHTML("hero",r[0],r[5],TINT[g],r[1],r[2],0,i);});
-  hlistEl.innerHTML=h||'<li class="empty">Никого не нашлось.</li>';wireImgs(hlistEl);reveal(hlistEl,".pol");
+  hlistEl.innerHTML=h||'<li class="empty">'+T('emptyHero')+'</li>';wireImgs(hlistEl);reveal(hlistEl,".pol");
 }
 function resetAll(){state={q:"",d:0,c:"",g:""};qEl.value="";sync();renderList();renderHeroes();}
 var qEl=document.getElementById("q");
 qEl.addEventListener("input",function(){state.q=qEl.value;renderList();renderHeroes();});
-qEl.addEventListener("keydown",function(e){if(e.key==="Enter"){qEl.blur();document.getElementById(visible.length||!hvisible.length?"bestiary":"heroes").scrollIntoView({behavior:reduce?"auto":"smooth"});}});
+/* smooth scroll to sections */
+var scrollAnim=null;
+function stopScroll(){if(scrollAnim){cancelAnimationFrame(scrollAnim);scrollAnim=null;}}
+["wheel","touchstart","keydown"].forEach(function(ev){addEventListener(ev,stopScroll,{passive:true});});
+function goTo(el){
+  if(!el)return;var bar=document.querySelector(".bar"),off=(bar?bar.offsetHeight:60)+14;
+  var y=Math.max(0,el.getBoundingClientRect().top+window.scrollY-(el.id==="top"?0:off));
+  var h2=el.querySelector("h2");
+  function arrive(){if(h2&&!reduce){h2.classList.remove("arrive");void h2.offsetWidth;h2.classList.add("arrive");setTimeout(function(){h2.classList.remove("arrive");},2100);}}
+  stopScroll();
+  if(reduce){window.scrollTo(0,y);arrive();return;}
+  var y0=window.scrollY,dy=y-y0,dur=Math.min(1200,Math.max(550,Math.abs(dy)*.35)),t0=null;
+  function step(t){if(t0===null)t0=t;var p=Math.min(1,(t-t0)/dur),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+    window.scrollTo(0,y0+dy*e);if(p<1)scrollAnim=requestAnimationFrame(step);else{scrollAnim=null;arrive();}}
+  scrollAnim=requestAnimationFrame(step);
+}
+document.addEventListener("click",function(e){var a=e.target.closest('a[href^="#"]');if(!a)return;var el=document.getElementById(a.getAttribute("href").slice(1));if(!el)return;e.preventDefault();goTo(el);});
+qEl.addEventListener("keydown",function(e){if(e.key==="Enter"){qEl.blur();setTimeout(function(){goTo(document.getElementById(visible.length||!hvisible.length?"bestiary":"heroes"));},0);}});
 
 document.addEventListener("click",function(e){
   var b=e.target.closest(".pol[data-id],.pol[data-hero],[data-open]");if(!b||b.closest(".sheet"))return;
@@ -1150,12 +1450,12 @@ document.addEventListener("click",function(e){
 });
 
 /* cross links */
-(function(){var ids=["crowley","lucifer","archangels","god","amara","death","billie","metatron"],h='<span>Ещё о них в разделе монстров:</span>';
+(function(){var ids=["crowley","lucifer","archangels","god","amara","death","billie","metatron"],h='<span>'+T('xl')+'</span>';
   ids.forEach(function(id){if(byId[id])h+='<button type="button" data-open="'+id+'">'+esc(byId[id][1])+'</button>';});
   document.getElementById("xlinks").innerHTML=h;})();
 
 /* arsenal */
-(function(){var h="";ARSENAL.forEach(function(a,i){h+='<div class="item" style="--i:'+(i%6)+'"><span class="ico">'+icon(a[1])+'</span><div><h3>'+esc(a[0])+'</h3><p class="vs">Против: '+esc(a[2])+'</p><p>'+esc(a[3])+'</p></div></div>';});
+(function(){var h="";ARSENAL.forEach(function(a,i){h+='<div class="item" style="--i:'+(i%6)+'"><span class="ico">'+icon(a[1])+'</span><div><h3>'+esc(a[0])+'</h3><p class="vs">'+T('vs')+esc(a[2])+'</p><p>'+esc(a[3])+'</p></div></div>';});
   var el=document.getElementById("items");el.innerHTML=h;reveal(el,".item");})();
 
 /* scroll lock (iOS-safe) */
@@ -1166,17 +1466,17 @@ function unlock(){var s=document.body.style;s.position="";s.top="";s.left="";s.r
 /* sheet */
 var wrap=document.getElementById("sheetWrap"),sheet=document.getElementById("sheet"),body=document.getElementById("sheetBody"),lastFocus=null,closeT=null,isOpen=false;
 function nav(list,idx){var p=list[idx-1],n=list[idx+1];
-  return '<div class="snav"><button type="button" data-go="'+(p?p[0]:"")+'"'+(p?'':' disabled')+'><small>Назад</small><span>'+(p?esc(p[1]):"—")+'</span></button><button type="button" class="nx" data-go="'+(n?n[0]:"")+'"'+(n?'':' disabled')+'><small>Дальше</small><span>'+(n?esc(n[1]):"—")+'</span></button></div>';}
+  return '<div class="snav"><button type="button" data-go="'+(p?p[0]:"")+'"'+(p?'':' disabled')+'><small>'+T('prev')+'</small><span>'+(p?esc(p[1]):"—")+'</span></button><button type="button" class="nx" data-go="'+(n?n[0]:"")+'"'+(n?'':' disabled')+'>'+'<small>'+T('next')+'</small><span>'+(n?esc(n[1]):"—")+'</span></button></div>';}
 function sheetPol(id,ic,tint,cap,tag,lvl){return '<div class="pol" style="--r:-2.5deg">'+photoHTML(id,ic,tint)+'<span class="cap">'+esc(cap)+'</span><span class="tagl'+(lvl?' lvl'+lvl:'')+'">'+esc(tag)+'</span></div>';}
 function fillCreature(r){
   var list=visible.indexOf(r)>=0?visible:DATA,idx=list.indexOf(r),d=r[4];
-  body.innerHTML='<div class="stop">'+sheetPol(r[0],r[5],TINT[d],r[1],CATS[r[3]],d)+'<span class="bigstamp lvl'+d+'">Угроза: '+DNAME[d]+'</span></div>'+
+  body.innerHTML='<div class="stop">'+sheetPol(r[0],r[5],TINT[d],r[1],CATS[r[3]],d)+'<span class="bigstamp lvl'+d+'">'+T('threat')+DNAME[d]+'</span></div>'+
    '<h2 class="stitle" id="sTitle">'+esc(r[1])+'</h2><p class="sorig">'+esc(r[2])+'</p>'+
    '<div class="smeta"><span>'+CATS[r[3]]+'</span>'+(r[6]?'<span>'+esc(r[6])+'</span>':'')+'</div>'+
-   '<div class="secs"><div class="sec"><h4>Откуда легенда</h4><p>'+esc(r[7])+'</p></div>'+
-   '<div class="sec"><h4>Какой он в сериале</h4><p>'+esc(r[8])+'</p></div>'+
-   (LORE[r[0]]?spSec('Его история в сериале','<p>'+esc(LORE[r[0]])+'</p>'):'')+
-   (SPRE.test(r[9])?spSec('Как убить','<p>'+esc(r[9])+'</p>','kill'):'<div class="sec kill"><h4>Как убить</h4><p>'+esc(r[9])+'</p></div>')+
+   '<div class="secs"><div class="sec"><h4>'+T('mythH')+'</h4><p>'+esc(r[7])+'</p></div>'+
+   '<div class="sec"><h4>'+T('showH')+'</h4><p>'+esc(r[8])+'</p></div>'+
+   (LORE[r[0]]?spSec(T('loreH'),'<p>'+esc(LORE[r[0]])+'</p>'):'')+
+   ((window.KILLSP?KILLSP[r[0]]:SPRE.test(r[9]))?spSec(T('killH'),'<p>'+esc(r[9])+'</p>','kill'):'<div class="sec kill"><h4>'+T('killH')+'</h4><p>'+esc(r[9])+'</p></div>')+
    '<div class="sec"><div class="hnote">'+esc(r[10])+'</div></div></div>'+nav(list,idx);
 }
 function fillHero(r){
@@ -1185,12 +1485,12 @@ function fillHero(r){
   var tls="";if(tl)tl.forEach(function(t){tls+='<li><b>'+t[0]+'</b><span>'+esc(t[1])+'</span></li>';});
   body.innerHTML='<div class="stop">'+sheetPol(r[0],r[5],TINT[g],r[1],r[2],0)+'</div>'+
    '<h2 class="stitle" id="sTitle">'+esc(r[1])+'</h2><p class="sorig">'+esc(r[2])+'</p>'+
-   '<div class="smeta">'+(r[3]!=="—"?'<span>Актёр: '+esc(r[3])+'</span>':'')+'<span>Сезоны '+esc(r[4])+'</span><span>'+HGROUPS[g]+'</span></div>'+
-   '<div class="secs">'+spSec('История','<p>'+esc(r[6])+'</p>')+
-   '<div class="sec"><h4>Характер</h4><p>'+esc(r[7])+'</p></div>'+
-   (tls?spSec('По сезонам','<ol class="tl">'+tls+'</ol>'):'')+
-   spSec('Главное','<ul class="mlist">'+ms+'</ul>')+
-   spSec('Чем всё закончилось','<p>'+esc(r[9])+'</p>','kill')+'</div>'+nav(list,idx);
+   '<div class="smeta">'+(r[3]!=="—"?'<span>'+T('actor')+esc(r[3])+'</span>':'')+'<span>'+T('seasons')+esc(r[4])+'</span><span>'+HGROUPS[g]+'</span></div>'+
+   '<div class="secs">'+spSec(T('storyH'),'<p>'+esc(r[6])+'</p>')+
+   '<div class="sec"><h4>'+T('charH')+'</h4><p>'+esc(r[7])+'</p></div>'+
+   (tls?spSec(T('tlH'),'<ol class="tl">'+tls+'</ol>'):'')+
+   spSec(T('momH'),'<ul class="mlist">'+ms+'</ul>')+
+   spSec(T('fateH'),'<p>'+esc(r[9])+'</p>','kill')+'</div>'+nav(list,idx);
 }
 function fill(id){
   if(byHero[id])fillHero(byHero[id]);else fillCreature(byId[id]);
@@ -1209,7 +1509,11 @@ function closeSheet(){
   closeT=setTimeout(function(){wrap.hidden=true;body.innerHTML="";unlock();if(lastFocus&&lastFocus.focus)lastFocus.focus({preventScroll:true});},reduce?0:480);
 }
 wrap.addEventListener("click",function(e){
-  var rv=e.target.closest(".reveal");if(rv){rv.parentElement.classList.remove("veiled");return;}
+  var rv=e.target.closest(".reveal");if(rv){var sec=rv.parentElement;
+    if(reduce){sec.classList.remove("veiled");return;}
+    rv.classList.add("pop");
+    setTimeout(function(){sec.classList.remove("veiled");sec.classList.add("unveil");setTimeout(function(){sec.classList.remove("unveil");},950);},240);
+    return;}
   if(e.target.closest("[data-close]")){closeSheet();return;}
   var g=e.target.closest("[data-go]");if(g&&g.dataset.go)fill(g.dataset.go);
 });
@@ -1272,7 +1576,7 @@ fitLogo();addEventListener("resize",fitLogo);if(document.fonts&&document.fonts.r
 renderList();renderHeroes();
 var h0=decodeURIComponent((location.hash||"").slice(1)),pending=(h0&&(byId[h0]||byHero[h0]))?h0:null;
 var tog=document.getElementById("sptog"),spState=document.getElementById("spState");
-function syncTog(){tog.setAttribute("aria-pressed",String(HIDE));tog.querySelector(".lbl").textContent=HIDE?"Без спойлеров":"Спойлеры";spState.textContent=HIDE?"скрыты":"показаны";tog.querySelector(".slash").style.display=HIDE?"":"none";}
+function syncTog(){tog.setAttribute("aria-pressed",String(HIDE));tog.querySelector(".lbl").textContent=HIDE?T("spOn"):T("spOff");spState.textContent=HIDE?T("spHidden"):T("spShown");tog.querySelector(".slash").style.display=HIDE?"":"none";}
 syncTog();
 tog.addEventListener("click",function(){HIDE=!HIDE;try{localStorage.setItem(SPKEY,HIDE?"hide":"show");}catch(e){}syncTog();
   if(isOpen){var gone=body.querySelectorAll(".spoil");gone.forEach(function(el){el.classList.toggle("veiled",HIDE);});}});
